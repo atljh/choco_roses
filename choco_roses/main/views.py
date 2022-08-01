@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpRequest, JsonResponse
 from django.urls import reverse
-from .models import RoseColor
 
 
 def main(request: HttpRequest) -> JsonResponse:
@@ -13,6 +12,14 @@ def main(request: HttpRequest) -> JsonResponse:
     }, status=200)
 
 
+def base(request: HttpRequest):
+    return render(request, 'base.html')
 
-def foo(x):
-    return x+1
+
+
+def login(request: HttpRequest):
+    return render(request, 'sign-in.html')
+
+
+def signup(request: HttpRequest):
+    return render(request, 'sign-up.html')

@@ -7,32 +7,29 @@ from django.contrib.auth.decorators import login_required
 from main.models import Product, Order
 
 
-
 def index(request):
-    print(Product.objects.all())
     # create_product = Product.objects.create(name=name, price=price, color=color, amount=amount, descriprion)
     # create_amount = RoseAmount.objects.create(amount=amount)
     # print(request.user.is_superuser)
-
     return render(request, 'crm/index.html')
 
 
 def orders_req(request):
     orders = Order.objects.all()
-    return render(request, 'crm/orders.html', {'orders': orders})
+    return render(request, 'crm/user-list.html', {'orders': orders})
 
 
 def order_req(request, order_id):
     order = Order.objects.get(id=order_id)
-    return render(request, 'crm/order.html', {'order': order})
+    return render(request, 'order.html', {'order': order})
 
 
 def clients_req(request):
-    return render(request, 'crm/clients.html')
+    return render(request, 'clients.html')
 
 
 def client_req(request):
-    return render(request, 'crm/client.html')
+    return render(request, 'client.html')
 
 
 def add_order(request):
@@ -40,7 +37,7 @@ def add_order(request):
 
 
 def add_client(request):
-    return render(request, 'crm/add_client.html')
+    return render(request, 'add_client.html')
 
 
 
