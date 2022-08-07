@@ -1,2 +1,6 @@
 venv
 vito-lite
+.env
+migrations
+.idea
+features
