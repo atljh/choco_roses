@@ -23,3 +23,7 @@ def login(request: HttpRequest):
 
 def signup(request: HttpRequest):
     return render(request, 'sign-up.html')
+
+
+
+
