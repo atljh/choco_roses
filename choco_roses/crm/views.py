@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework import generics
 from django.shortcuts import render, redirect
 from rest_framework.permissions import IsAuthenticated
@@ -6,6 +7,8 @@ from main.models import (
     Product, Order, RoseColour, RoseAmount, RoseBoxes, RosePacking, BucketsDetails, BucketsColours)
 import environ
 from django.contrib.admin.views.decorators import staff_member_required
+from main.forms import BucketForm
+
 
 env = environ.Env()
 environ.Env.read_env()
@@ -15,6 +18,7 @@ environ.Env.read_env()
 def index(request):
     # create_product = Product.objects.create(name=name, price=price, color=color, amount=amount, descriprion)
     # create_amount = RoseAmount.objects.create(amount=amount)
+
     return render(request, 'crm/index.html')
 
 
@@ -172,18 +176,38 @@ def save_order(request):
     # order.save()
 
 
-    price = request.POST.get('colour1', 'None')
-    print(price)
+    colours = request.POST.get('colours[]', 'None')
 
     return redirect('/crm/add_order/')
 
 
 
+def add_bucket(request):
+
+    print(request.GET)
+    print(request.GET.getlist('colours[]'))
+
+    return JsonResponse({"some": 'good'}, status=200)
+    # bucket_form = BucketForm()
+    # if request.method == "POST" and request.is_ajax():
+    #     bucket_form = BucketForm(request.POST)
+    #     if bucket_form.is_valid():
+    #         price = bucket_form.cleaned_data['price']
+    #         # form.save()
+    #         return JsonResponse({"price": price}, status=200)
+    # else:
+    #     response = {'text': 1}
+    #     return JsonResponse(response)
+    # errors = bucket_form.errors.as_json()
+    # return JsonResponse({"errors": errors}, status=400)
+
 
 @staff_member_required
 def save_bucket(request):
     order_id = 0
-    colour1 = request.POST.get('colour1', 'None')
+    colours = request.POST.get('colours', 'None')
+
+
     colour2 = request.POST.get('colour2', 'None')
     colour3 = request.POST.get('colour3', 'None')
     colour4 = request.POST.get('colour4', 'None')
@@ -194,6 +218,15 @@ def save_bucket(request):
     packing = request.POST.get('packing', 'None')
     rose_box = request.POST.get('box', 'None')
     price = request.POST.get('price', 'None')
+
+
+
+    session = request.session.items()
+
+    # if request.session.get('buckets'):
+    #     del request.session['buckets']
+    print(session)
+
 
 
     # Save BucketDetails model
@@ -242,7 +275,7 @@ def edit_order(request, order_id):
     order.instagram = instagram
     order.from_where = from_where
     order.address = address
-    order.phone =phone
+    order.phone = phone
     order.order_type = order_type
     order.order_status = order_status
     order.anonymous = anonymous

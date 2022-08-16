@@ -85,6 +85,7 @@ class BucketsColours(models.Model):
     # def __str__(self):
     #     return f'id {self.id}'
 
+
     def __str__(self):
         colours = []
         for colour in [self.colour1, self.colour2, self.colour3, self.colour4, self.colour5, self.colour6, self.colour7]:
