@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 
 from main.models import (
 	Order, RoseColour, RoseAmount, RoseBoxes, RosePacking, BucketsDetails, BucketsColours)
+import json
 
 env = environ.Env()
 environ.Env.read_env()
@@ -169,10 +170,12 @@ def save_order(request):
 
 
 def add_bucket(request):
-	print(request.GET)
-	print(request.GET.getlist('colours[]'))
+	print(request.POST)
+	data = json.loads(request.POST.get('items'))
+	for i in data:
+		print(f'Букет номер {data.index(i)+1}:', i)
 
-	return JsonResponse({"some": 'good'}, status=200)
+	return JsonResponse({"response": 'good'}, status=200)
 
 
 @staff_member_required

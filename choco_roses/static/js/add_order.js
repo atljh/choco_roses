@@ -18,15 +18,76 @@ $(document).ready(function () {
 
 
 
+//$(document).ready(function () {
+//    $("#saveorder").on("click", function () {
+//        $.ajax({
+//            data: $("#order_form").serialize(),
+//            type: $(this).attr('method'),
+//            url: "/crm/add_bucket/",
+//
+//            success: function (response) {
+//                        alert("S " + response.price);
+//                    },
+//
+//            error: function (response) {
+//                alert("Error");
+//            }
+//        });
+//        return false;
+//    });
+//})
+
+
+// GET CSRF TOKEN
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+
+
 $(document).ready(function () {
     $("#saveorder").on("click", function () {
+//        var bucket = $( ".bucket" ).find('.iq-card-body').find('.form-group').find('.form-control')
+        var bucket = $( ".bucket" ).find('.iq-card-body')
+        const items = [];
+        bucket.each(function(){
+            bucket_items = $(this).find('.form-group').find('.form-control');
+            const temp = [];
+            bucket_items.each(function(){
+                item = $(this).val()
+                temp.push(item);
+//                if (item != ''){
+//                    items.push(item);
+//                    }
+            });
+            items.push(temp);
+        });
+        console.log(items)
+
         $.ajax({
-            data: $("#order_form").serialize(),
-            type: $(this).attr('method'),
+            data: {
+                  'items': JSON.stringify(items),
+//                'items':items,
+                csrfmiddlewaretoken: csrftoken,
+            },
+            type: "POST",
             url: "/crm/add_bucket/",
 
             success: function (response) {
-                        alert("S " + response.price);
+                        alert ('All done ok');
                     },
 
             error: function (response) {
