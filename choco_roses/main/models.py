@@ -70,32 +70,9 @@ class RosePacking(models.Model):
 		return self.rose_packing
 
 
-class BucketsColours(models.Model):
-	bucket_id = models.IntegerField()
-	colour1 = models.CharField(max_length=100)
-	colour2 = models.CharField(max_length=100, null=True, blank=True)
-	colour3 = models.CharField(max_length=100, null=True, blank=True)
-	colour4 = models.CharField(max_length=100, null=True, blank=True)
-	colour5 = models.CharField(max_length=100, null=True, blank=True)
-	colour6 = models.CharField(max_length=100, null=True, blank=True)
-	colour7 = models.CharField(max_length=100, null=True, blank=True)
-
-	# def __str__(self):
-	#     return f'id {self.id}'
-
-	def __str__(self):
-		colours = []
-		for colour in [
-			self.colour1, self.colour2, self.colour3, self.colour4,
-			self.colour5, self.colour6, self.colour7]:
-			if colour != 'None':
-				colours.append(colour)
-		return str(colours)
-
-
 class BucketsDetails(models.Model):
 	order_id = models.IntegerField()
-	colours = models.IntegerField()
+	colours = models.CharField(max_length=150, blank=True, null=False)
 	rose_amount = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000000)])
 	packing = models.CharField(max_length=100, blank=True, null=True)
 	rose_box = models.CharField(max_length=100, blank=True, null=True)
@@ -119,7 +96,6 @@ class Order(models.Model):
 	)
 
 	number = models.IntegerField(null=True)
-	bucket = models.IntegerField(null=True)
 	total_price = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000000)])
 	name_surname = models.CharField(max_length=50, default='', blank=True)
 	address = models.CharField(max_length=50, default='', null=True, blank=True)
@@ -130,7 +106,7 @@ class Order(models.Model):
 	delivery_data = models.CharField(max_length=100, null=True, blank=True)
 	pickup_data = models.CharField(max_length=100, null=True, blank=True)
 	payment = models.CharField(max_length=100, null=True, blank=True)
-	order_status = models.CharField(max_length=100, choices=STATUS, default='В процессе`')
+	order_status = models.CharField(max_length=100, default='В процессе`')
 	from_where = models.CharField(max_length=100, blank=True, null=True)
 	anonymous = models.BooleanField(default=False)
 	first_order = models.BooleanField(default=False)
@@ -147,11 +123,6 @@ class Order(models.Model):
 	def get_buckets_amount(self):
 		buckets = BucketsDetails.objects.filter(order_id=self.id)
 		return len(buckets)
-
-	def get_buckets_colours(self):
-		buckets = BucketsDetails.objects.get(order_id=self.id)
-		colours = BucketsColours.objects.get(bucket_id=buckets.id)
-		return colours
 
 	def __str__(self):
 		return f'id {self.id}'

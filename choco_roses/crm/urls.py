@@ -14,11 +14,11 @@ urlpatterns = [
 	path('edit_order/<int:order_id>/', views.edit_order, name='edit-order'),
 	path('delete_order/<int:order_id>/', views.delete_order, name='delete-order'),
 	path('save_order/', views.save_order, name='save-order'),
-	path('save_bucket/', views.save_bucket, name='save-bucket'),
 	path('add_bucket/', views.add_bucket, name='add-bucket'),
-	path('clients/', views.clients_req, name='clients'),
-	path('clients/<int:client_id>/', views.client_req, name='client'),
-	path('add_client/', views.add_client, name='add-client'),
+
+	# path('clients/', views.clients_req, name='clients'),
+	# path('clients/<int:client_id>/', views.client_req, name='client'),
+	# path('add_client/', views.add_client, name='add-client'),
 
 	path('validate_number/', validators.validate_number, name='validate-number'),
 	path('validate_name/', validators.validate_name, name='validate-name'),

@@ -1,3 +1,4 @@
+// CLONE BUCKET FORM
 
 $(document).ready(function () {
     var copies=1;
@@ -8,34 +9,16 @@ $(document).ready(function () {
 });
 
 
+// CLONE COLOURS FIELD
+
 $(document).ready(function () {
     var copies=1;
     $("#addcolour").on("click", function () {
         table = $(this).parent().find('.colour_table');
-        $("#colour").clone(true, true).attr('id','colour_'+(copies++)).appendTo(table);
+        $("#colour").clone(true, true).attr('name','colours_'+(copies++)).appendTo(table);
+//        $("#colour").clone(true, true).find('.form-control').attr('name','colours_'+(copies++)).appendTo(table);
     });
 });
-
-
-
-//$(document).ready(function () {
-//    $("#saveorder").on("click", function () {
-//        $.ajax({
-//            data: $("#order_form").serialize(),
-//            type: $(this).attr('method'),
-//            url: "/crm/add_bucket/",
-//
-//            success: function (response) {
-//                        alert("S " + response.price);
-//                    },
-//
-//            error: function (response) {
-//                alert("Error");
-//            }
-//        });
-//        return false;
-//    });
-//})
 
 
 // GET CSRF TOKEN
@@ -45,7 +28,6 @@ function getCookie(name) {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
@@ -57,34 +39,62 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 
 
+// GET ORDER
 
 $(document).ready(function () {
     $("#saveorder").on("click", function () {
-//        var bucket = $( ".bucket" ).find('.iq-card-body').find('.form-group').find('.form-control')
-        var bucket = $( ".bucket" ).find('.iq-card-body')
-        const items = [];
-        bucket.each(function(){
-            bucket_items = $(this).find('.form-group').find('.form-control');
-            const temp = [];
-            bucket_items.each(function(){
-                item = $(this).val()
-                temp.push(item);
-//                if (item != ''){
-//                    items.push(item);
-//                    }
-            });
-            items.push(temp);
-        });
-        console.log(items)
+        var order = $('.order').find('.iq-card-body').find('.form-group').find('.form-control');
+        const orders_details = {};
+        order.each(function(){
+            var order_field = $(this);
+            var order_field_name = order_field.attr('name');
+//            console.log(order_field_name, order_field.val());
+            orders_details[order_field_name] = order_field.val();
 
+        });
+        var checkbox = $('.order').find('.iq-card-body').find('.checkbox').find('.check')
+        checkbox.each(function(){
+            var checkbox_field = $(this).prop("checked");
+            var checkbox_name = $(this).attr('name');
+            orders_details[checkbox_name] = checkbox_field;
+
+        });
+
+
+
+        var bucket = $( ".bucket" ).find('.iq-card-body');
+        const all_buckets = [];
+        bucket.each(function(){
+            bucket_fields = $(this).find('.form-group').find('.form-control');
+            const bucket_values = {};
+            var colours_list = [];
+            bucket_fields.each(function(){
+                var field = $(this);
+                var field_name = field.attr('name');
+                if (field_name == 'colours'){
+                    colours_list.push(field.val())
+                    bucket_values[field_name] = colours_list;
+                }
+                else {
+                    bucket_values[field_name] = field.val();
+                }
+//                if (field.val() != ''){
+//
+//                    }
+//                console.log(bucket_values);
+            });
+            all_buckets.push(bucket_values);
+        });
+
+//        console.log(all_buckets);
         $.ajax({
             data: {
-                  'items': JSON.stringify(items),
-//                'items':items,
-                csrfmiddlewaretoken: csrftoken,
+                'order': JSON.stringify(orders_details),
+                'buckets': JSON.stringify(all_buckets),
+                'csrfmiddlewaretoken': csrftoken,
             },
             type: "POST",
-            url: "/crm/add_bucket/",
+            url: "/crm/save_order/",
 
             success: function (response) {
                         alert ('All done ok');
@@ -173,6 +183,7 @@ $(document).ready(function () {
 })
 
 
+            type: "POST",
 //Validate phone
 
 $(document).ready(function () {
