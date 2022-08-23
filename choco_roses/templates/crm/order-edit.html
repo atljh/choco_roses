@@ -182,212 +182,174 @@
          </div>
          <!-- Page Content  -->
       </div>
-   <div id="content-page" class="content-page">
-      <div class="container-fluid">
-         <form action="/crm/edit_order/{{ order.id }}/" method="post">
-            {% csrf_token %}
-            <div class="row">
-               <!-- Order details -->
-               <div class="col-lg-3">
-                  <div class="iq-card">
-                     <div class="iq-card-header d-flex justify-content-between">
-                        <div class="iq-header-title">
-                           <h4 class="card-title">Редактировать заказ</h4>
-                        </div>
-                     </div>
-                     <div class="iq-card-body">
-                             <div class="form-group">
-                              <label for="name_surname">Номер:</label>
-                              <input type="text" class="form-control" id="number" name="number" value="{{order.number}}">
-                           </div>
-                           <div class="form-group">
-                              <label for="name_surname">Имя Фамилия:</label>
-                              <input type="text" class="form-control" id="name_surname" name="name_surname" value="{{order.name_surname}}">
-                           </div>
-                           <div class="form-group">
-                              <label for="address">Адрес:</label>
-                              <input type="text" class="form-control" id="address" name="address" value="{{order.address}}">
-                           </div>
-                           <div class="form-group">
-                              <label for="phone">Телефон:</label>
-                              <input type="tel" class="form-control" id="phone" name="phone" value="{{order.phone}}">
-                           </div>
-                           <div class="form-group">
-                              <label for="instagram">Инстаграм:</label>
-                              <input type="text" class="form-control" id="instagram" name="instagram" value="{{order.instagram}}">
-                           </div>
-                           <div class="form-group">
-                              <label for="payment">Оплата:</label>
-                              <input type="text" class="form-control" id="payment" name="payment" value="{{order.payment}}">
-                           </div>
-                           <div class="form-group">
-                              <label for="delivery_data">Дата доставки:</label>
-                              <input type="text" class="form-control" id="delivery_data" name="delivery_data" value="{{order.deliveyry_data}}">
-                           </div>
-                           <div class="form-group">
-                              <label for="pickup_data">Дата самовывоза:</label>
-                              <input type="text" class="form-control" id="pickup_data" name="pickup_data" value="{{order.pickup_data}}">
-                           </div>
-                           <div class="form-group">
-                              <label>Тип заказа:</label>
-                              <select class="form-control" id="order_type" name="order_type">
-                                 {% if order.order_type == 'Самовывоз'%}
-                                    <option selected>Самовывоз</option>
-                                    <option>Доставка</option>
-                                 {% else %}
-                                    <option selected>Доставка</option>
-                                    <option>Самовывоз</option>
-                                 {% endif %}
-                              </select>
-                           </div>
-                           <div class="form-group">
-                              <label>Статус заказа:</label>
-                              <select class="form-control" id="order-status" name="order-status">
-                                 <option selected>{{order.order_status}}</option>
-                                 <option>В процессе</option>
-                                 <option>Упакован</option>
-                                 <option>В пути</option>
-                                 <option>Доставлен</option>
-                                 <option>Отдан</option>
-                              </select>
-                           </div>
-                           <div class="checkbox">
-                              {% if order.anonymous == True %}
-                                 <label><input class="mr-2" type="checkbox" name="anonymous" checked>Анонимно</label>
-                              {% else %}
-                                 <label><input class="mr-2" type="checkbox" name="anonymous">Анонимно</label>
-                              {% endif%}
-                           </div>
-                           <div class="checkbox">
-                              {% if order.first_order == True%}
-                                 <label><input class="mr-2" type="checkbox" name="first_order" checked>Первый заказ</label>
-                              {% else %}
-                                 <label><input class="mr-2" type="checkbox" name="first_order">Первый заказ</label>
-                              {% endif %}
-                           </div>
-                           <div class="form-group">
-                              <label for="total_price">Общая стоимость:</label>
-                              <input type="text" class="form-control" id="total_price" name="total_price" value="{{order.total_price}}">
-                           </div>
-                           <div class="mb-3">
-                              <label for="description" class="form-label">Описание</label>
-                              <textarea class="form-control" id="description" rows="3" name="description">{{order.description}}</textarea>
-                           </div>
-                           <button type="submit" class="btn btn-primary">Сохранить заказ</button>
-                     </div>
+      <div id="content-page" class="content-page">
+          <div class="container-fluid">
+              <form action="{% url 'save-order' %}" id="order_form" method="post">
+                  {% csrf_token %}
+                  <div id="row" class="row order-body">
+                      <!-- Order details -->
+                      <div class="col-lg-3 order">
+                          <div class="iq-card">
+                              <div class="iq-card-header d-flex justify-content-between">
+                                  <div class="iq-header-title">
+                                      <h4 class="card-title">Добавить заказ</h4>
+                                  </div>
+                              </div>
+                              <div class="iq-card-body">
+                                  <div class="form-group">
+                                      <label for="name_surname">Номер:</label>
+                                      <input type="text" class="form-control" id="number" name="number" value="{{ order.number }}">
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="name_surname">Имя Фамилия:</label>
+                                      <input type="text" class="form-control" id="name_surname" name="name_surname" value="{{ order.name_surname }}">
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="address">Адрес:</label>
+                                      <input type="text" class="form-control" id="address" name="address" value="{{ order.address }}">
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="phone">Телефон:</label>
+                                      <input type="tel" class="form-control" id="phone" name="phone" value="{{ order.phone }}">
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="instagram">Инстаграм:</label>
+                                      <input type="text" class="form-control" id="instagram" name="instagram" value="{{ order.instagram }}">
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="payment">Оплата:</label>
+                                      <input type="text" class="form-control" id="payment" name="payment" value="{{ order.payment }}">
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="delivery_data">Дата доставки:</label>
+                                      <input type="text" class="form-control" id="delivery_data" name="delivery_data"
+                                             placeholder="00:00 dd/mm/yyyy" value="{% if order.delivery_data != None %}{{ order.delivery_data }}{% endif %}">
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="pickup_data">Дата самовывоза:</label>
+                                      <input type="text" class="form-control" id="pickup_data" name="pickup_data"
+                                             placeholder="00:00 dd/mm/yyyy" value="{% if order.pickup_data != None %}{{ order.pickup_data }}{% endif %}">
+                                  </div>
+                                  <div class="form-group">
+                                      <label>Тип заказа:</label>
+                                      <select class="form-control" id="order_type" name="order_type">
+                                          {% if order.order_type == 'Доставка' %}
+                                              <option selected>Доставка</option>
+                                              <option>Самовывоз</option>
+                                          {% else %}
+                                              <option selected>Самовывоз</option>
+                                              <option>Доставка</option>
+                                          {% endif %}
+                                      </select>
+                                  </div>
+                                  <div class="form-group">
+                                      <label>Статус заказа:</label>
+                                      <select class="form-control" id="order-status" name="order_status">
+                                          <option selected>{{ order.order_status }}</option>
+                                          <option>В процессе</option>
+                                          <option>Упакован</option>
+                                          <option>В пути</option>
+                                          <option>Доставлен</option>
+                                          <option>Отдан</option>
+                                      </select>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="from_where">Откуда заказ:</label>
+                                      <input type="text" class="form-control" id="from_where" name="from_where"
+                                             placeholder="" value="{{ order.from_where }}">
+                                  </div>
+                                  <div class="checkbox">
+                                      {% if order.anonymous == True %}
+                                      <label><input class="mr-2 check" type="checkbox" name="anonymous" checked>Анонимно</label>
+                                      {% else %}
+                                      <label><input class="mr-2 check" type="checkbox" name="anonymous">Анонимно</label>
+                                      {% endif %}
+                                  </div>
+                                  <div class="checkbox">
+                                      {% if order.first_order == True %}
+                                      <label><input class="mr-2 check" type="checkbox" name="first_order" checked>Первый заказ</label>
+                                      {% else %}
+                                      <label><input class="mr-2 check" type="checkbox" name="first_order">Первый заказ</label>
+                                      {% endif %}
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="total_price">Общая стоимость:</label>
+                                      <input type="text" class="form-control" id="total_price" name="total_price"
+                                             value="{{ order.total_price }}">
+                                  </div>
+                                  <div class="mb-3 form-group">
+                                      <label for="description" class="form-label">Описание</label>
+                                      <textarea class="form-control" id="description" rows="3" name="description">{{ order.description }}</textarea>
+                                  </div>
+
+                                  <button type="button" class="btn btn-primary" id="saveorder">Сохранить заказ</button>
+                                  <button type="button" class="btn btn-primary" id="add">Добавить еще букет</button>
+                              </div>
+                          </div>
+                      </div>
+                      <!-- Orders bucket -->
+                      {% for bucket, bucket_colours in buckets %}
+                      <div class="col-lg-3 bucket" id="bucket">
+                          <div class="iq-card">
+                              <div class="iq-card-header d-flex justify-content-between">
+                                  <div class="iq-header-title">
+                                      <h4 class="card-title">Добавить букет</h4>
+                                  </div>
+                              </div>
+                              <div class="iq-card-body" id="col">
+                                  <div class="form-group colour_table" id="colour_table">
+                                      {% for col in bucket_colours %}
+                                      <div class="form-group" id="colour">
+                                          <label>Выберите цвет:</label>
+                                          <select class="form-control" id="colours" name="colours">
+                                              <option selected>{{ col }}</option>
+                                              {% for colour in colours %}
+                                                <option>{{colour.colour}}</option>
+                                              {% endfor %}
+                                          </select>
+                                      </div>
+                                      {% endfor %}
+                                  </div>
+                                  <button type="button" class="btn btn-primary" id="addcolour">Добавить еще цвет</button>
+                                  <div class="form-group">
+                                      <label>Выберите количество роз:</label>
+                                      <select class="form-control" id="rose_amount" name="rose_amount">
+                                          <option>{{ bucket.rose_amount }}</option>
+                                          {% for amount in rose_amount %}
+                                          <option>{{amount.rose_amount}}</option>
+                                          {% endfor %}
+                                      </select>
+                                  </div>
+                                  <div class="form-group">
+                                      <label>Выберите упаковку:</label>
+                                      <select class="form-control" id="packing" name="packing">
+                                          <option selected>{% if bucket.packing != None %}{{ bucket.packing }}{% endif %}</option>
+                                          {% for pack in rose_packing %}
+                                          <option>{{pack.rose_packing}}</option>
+                                          {% endfor %}
+                                      </select>
+                                  </div>
+                                  <div class="form-group">
+                                      <label>Выберите коробку:</label>
+                                      <select class="form-control" id="rose_box" name="rose_box">
+                                          <option selected>{% if bucket.rose_box != None %}{{ bucket.rose_box }}{% endif %}</option>
+                                          {% for box in boxes %}
+                                          <option>{{box.rose_box}}</option>
+                                          {% endfor %}
+                                      </select>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="price">Цена:</label>
+                                      <input type="text" class="form-control" id="price" name="price" value="{{ bucket.price }}">
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      {% endfor %}
                   </div>
-               </div>
-               <!-- Orders bucket -->
-               <div class="col-lg-3">
-                  <div class="iq-card">
-                     <div class="iq-card-header d-flex justify-content-between">
-                        <div class="iq-header-title">
-                           <h4 class="card-title">Добавить букет</h4>
-                        </div>
-                     </div>
-                     <div class="iq-card-body">
-                           <div class="form-group">
-                              <label>Выберите цвет:</label>
-                              <select class="form-control" id="colour1" name="colour1">
-                                 <option selected>{{buckets_colours.colour1}}</option>
-                                 {% for colour in colours %}
-                                       <option>{{colour.colour}}</option>
-                                 {% endfor %}
-                              </select>
-                           </div>
-                           <div class="form-group">
-                              <label>Выберите доп. цвет:</label>
-                              <select class="form-control" id="colour2" name="colour2">
-                                 <option selected>{{buckets_colours.colour2}}</option>
-                                 {% for colour in colours %}
-                                    <option>{{colour.colour}}</option>
-                                 {% endfor %}
-                              </select>
-                           </div>
-                           <div class="form-group">
-                              <label>Выберите доп. цвет:</label>
-                              <select class="form-control" id="colour3" name="colour3">
-                                 <option selected>{{buckets_colours.colour3}}</option>
-                                 {% for colour in colours %}
-                                    <option>{{colour.colour}}</option>
-                                 {% endfor %}
-                              </select>
-                           </div>
-                           <div class="form-group">
-                              <label>Выберите доп. цвет:</label>
-                              <select class="form-control" id="colour4" name="colour4">
-                                 <option selected>{{buckets_colours.colour4}}</option>
-                                 {% for colour in colours %}
-                                    <option>{{colour.colour}}</option>
-                                 {% endfor %}
-                              </select>
-                           </div>
-                        <div class="form-group">
-                              <label>Выберите доп. цвет:</label>
-                              <select class="form-control" id="colour5" name="colour5">
-                                 <option selected>{{buckets_colours.colour5}}</option>
-                                 {% for colour in colours %}
-                                    <option>{{colour.colour}}</option>
-                                 {% endfor %}
-                              </select>
-                           </div>
-                        <div class="form-group">
-                              <label>Выберите доп. цвет:</label>
-                              <select class="form-control" id="colour6" name="colour6">
-                                 <option selected>{{buckets_colours.colour6}}</option>
-                                 {% for colour in colours %}
-                                    <option>{{colour.colour}}</option>
-                                 {% endfor %}
-                              </select>
-                           </div>
-                        <div class="form-group">
-                              <label>Выберите доп. цвет:</label>
-                              <select class="form-control" id="colour7" name="colour7">
-                                 <option selected>{{buckets_colours.colour7}}</option>
-                                 {% for colour in colours %}
-                                    <option>{{colour.colour}}</option>
-                                 {% endfor %}
-                              </select>
-                           </div>
-                           <div class="form-group">
-                              <label>Выберите количество роз:</label>
-                              <select class="form-control" id="rose_amount" name="rose_amount">
-                                 {% for amount in rose_amount %}
-                                 <option>{{amount.rose_amount}}</option>
-                                 {% endfor %}
-                              </select>
-                           </div>
-                           <div class="form-group">
-                              <label>Выберите упаковку:</label>
-                              <select class="form-control" id="packing" name="packing">
-                                 <option selected>{{ buckets.packing}}</option>
-                                 {% for pack in rose_packing %}
-                                 <option>{{pack.rose_packing}}</option>
-                                 {% endfor %}
-                              </select>
-                           </div>
-                           <div class="form-group">
-                              <label>Выберите коробку:</label>
-                              <select class="form-control" id="rose_box"  name="rose_box">
-                                 <option selected>{{buckets.rose_box}}</option>
-                                 {% for box in boxes %}
-                                 <option>{{box.rose_box}}</option>
-                                 {% endfor %}
-                              </select>
-                           </div>
-                           <div class="form-group">
-                              <label for="price">Цена:</label>
-                              <input type="text" class="form-control" id="price" name="price" value="{{ buckets.price }}">
-                           </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="checkbox">
-               </div>
-            </div>
-         </form>
+              </form>
+          </div>
       </div>
-   </div>
       <!-- Wrapper END -->
       <!-- Footer -->
       <footer class="iq-footer">
@@ -441,5 +403,8 @@
       <script src="/static/js/chart-custom.js"></script>
       <!-- Custom JavaScript -->
       <script src="/static/js/custom.js"></script>
+
+      <!--MINE-->
+      <script src="/static/js/add_order.js"></script>
    </body>
 </html>

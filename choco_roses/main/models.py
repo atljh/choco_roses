@@ -87,13 +87,6 @@ class Order(models.Model):
 		('Самовывоз', 'Самовывоз'),
 		('Доставка', 'Доставка')
 	)
-	STATUS = (
-		('В процессе', 'В процессе'),
-		('Упакован', 'Упакован'),
-		('В пути', 'В пути'),
-		('Доставлен', 'Доставлен'),
-		('Отдан', 'Отдан')
-	)
 
 	number = models.IntegerField(null=True)
 	total_price = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000000)])
@@ -105,9 +98,9 @@ class Order(models.Model):
 	order_type = models.CharField(max_length=100, choices=CHOICES, default='Самовывоз')
 	delivery_data = models.CharField(max_length=100, null=True, blank=True)
 	pickup_data = models.CharField(max_length=100, null=True, blank=True)
-	payment = models.CharField(max_length=100, null=True, blank=True)
-	order_status = models.CharField(max_length=100, default='В процессе`')
-	from_where = models.CharField(max_length=100, blank=True, null=True)
+	payment = models.CharField(max_length=100, null=True, blank=True, default='')
+	order_status = models.CharField(max_length=100, default='В процессе')
+	from_where = models.CharField(max_length=100, blank=True, null=True, default='')
 	anonymous = models.BooleanField(default=False)
 	first_order = models.BooleanField(default=False)
 	created_by = models.CharField(max_length=100, blank=True)
@@ -125,4 +118,4 @@ class Order(models.Model):
 		return len(buckets)
 
 	def __str__(self):
-		return f'id {self.id}'
+		return f'{self.number}'

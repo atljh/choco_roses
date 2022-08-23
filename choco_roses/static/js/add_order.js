@@ -16,7 +16,6 @@ $(document).ready(function () {
     $("#addcolour").on("click", function () {
         table = $(this).parent().find('.colour_table');
         $("#colour").clone(true, true).attr('name','colours_'+(copies++)).appendTo(table);
-//        $("#colour").clone(true, true).find('.form-control').attr('name','colours_'+(copies++)).appendTo(table);
     });
 });
 
@@ -43,25 +42,26 @@ const csrftoken = getCookie('csrftoken');
 
 $(document).ready(function () {
     $("#saveorder").on("click", function () {
+
+        // Get orders fields
         var order = $('.order').find('.iq-card-body').find('.form-group').find('.form-control');
         const orders_details = {};
         order.each(function(){
             var order_field = $(this);
             var order_field_name = order_field.attr('name');
-//            console.log(order_field_name, order_field.val());
             orders_details[order_field_name] = order_field.val();
-
         });
+
+        // Ger orders checkboxes
         var checkbox = $('.order').find('.iq-card-body').find('.checkbox').find('.check')
         checkbox.each(function(){
             var checkbox_field = $(this).prop("checked");
             var checkbox_name = $(this).attr('name');
             orders_details[checkbox_name] = checkbox_field;
-
         });
 
 
-
+        // Get orders buckets and save to array as dict
         var bucket = $( ".bucket" ).find('.iq-card-body');
         const all_buckets = [];
         bucket.each(function(){
@@ -78,15 +78,12 @@ $(document).ready(function () {
                 else {
                     bucket_values[field_name] = field.val();
                 }
-//                if (field.val() != ''){
-//
-//                    }
-//                console.log(bucket_values);
             });
             all_buckets.push(bucket_values);
         });
 
-//        console.log(all_buckets);
+
+        // Send request with order data
         $.ajax({
             data: {
                 'order': JSON.stringify(orders_details),
@@ -98,6 +95,8 @@ $(document).ready(function () {
 
             success: function (response) {
                         alert ('All done ok');
+                        location.href = "/crm/orders/"
+
                     },
 
             error: function (response) {
@@ -183,7 +182,6 @@ $(document).ready(function () {
 })
 
 
-            type: "POST",
 //Validate phone
 
 $(document).ready(function () {
@@ -232,6 +230,157 @@ $(document).ready(function () {
 })
 
 
+$(document).ready(function () {
+    $("#delivery_data").change(function () {
+      $.ajax({
+            url: '/crm/validate_delivery_data/',
+            data: $("#delivery_data").serialize(),
+            dataType: 'json',
+            success: function (data) {
+                 if (data.result) {
+                 console.log('Ok')
+                 }
+                 else {
+                 alert("No");
+                 }
+            },
+            error: function(){
+                alert("failure");
+        }
+      });
+    });
+})
+
+
+$(document).ready(function () {
+    $("#pickup_data").change(function () {
+      $.ajax({
+            url: '/crm/validate_pickup_data/',
+            data: $("#pickup_data").serialize(),
+            dataType: 'json',
+            success: function (data) {
+                 if (data.result) {
+                 console.log('Ok')
+                 }
+                 else {
+                 alert("No");
+                 }
+            },
+            error: function(){
+                alert("failure");
+        }
+      });
+    });
+})
+
+
+$(document).ready(function () {
+    $("#payment").change(function () {
+      $.ajax({
+            url: '/crm/validate_payment/',
+            data: $("#payment").serialize(),
+            dataType: 'json',
+            success: function (data) {
+                 if (data.result) {
+                 console.log('Ok')
+                 }
+                 else {
+                 alert("No");
+                 }
+            },
+            error: function(){
+                alert("failure");
+        }
+      });
+    });
+})
+
+$(document).ready(function () {
+    $("#from_where").change(function () {
+      $.ajax({
+            url: '/crm/validate_from_where/',
+            data: $("#from_where").serialize(),
+            dataType: 'json',
+            success: function (data) {
+                 if (data.result) {
+                 console.log('Ok')
+                 }
+                 else {
+                 alert("No");
+                 }
+            },
+            error: function(){
+                alert("failure");
+        }
+      });
+    });
+})
+
+
+$(document).ready(function () {
+    $("#description").change(function () {
+      $.ajax({
+            url: '/crm/validate_description/',
+            data: $("#description").serialize(),
+            dataType: 'json',
+            success: function (data) {
+                 if (data.result) {
+                 console.log('Ok')
+                 }
+                 else {
+                 alert("No");
+                 }
+            },
+            error: function(){
+                alert("failure");
+        }
+      });
+    });
+})
+
+$(document).ready(function () {
+    $("#total_price").change(function () {
+      $.ajax({
+            url: '/crm/validate_total_price/',
+            data: $("#total_price").serialize(),
+            dataType: 'json',
+            success: function (data) {
+                 if (data.result) {
+                 console.log('Ok')
+                 }
+                 else {
+                 alert("No");
+                 }
+            },
+            error: function(){
+                alert("failure");
+        }
+      });
+    });
+})
+
+$(document).ready(function () {
+    $("#price").change(function () {
+      $.ajax({
+            url: '/crm/validate_price/',
+            data: $("#price").serialize(),
+            dataType: 'json',
+            success: function (data) {
+                 if (data.result) {
+                 console.log('Ok')
+                 }
+                 else {
+                 alert("No");
+                 }
+            },
+            error: function(){
+                alert("failure");
+        }
+      });
+    });
+})
+
+
 
 //$('#signup-btn').click(function(event){
 //    if(validate()){
@@ -260,28 +409,6 @@ $(document).ready(function () {
 //    }
 //
 //})
-
-//function validate(){
-//
-//    var isValid = true;
-//    if (!$('#id_fullname').val()){
-//        isValid = false
-//    }
-//    if (!$('#id_email').val()){
-//        isValid = false
-//    }else{
-//       if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($('#id_email').val()))){
-//            isValid = false;
-//        }
-//    }
-//    if (!$('#id_country').val()){
-//        isValid = false
-//    }
-//    if (!$('#id_password').val()){
-//        isValid = false
-//    }
-//    return isValid;
-//}
 
 
 
