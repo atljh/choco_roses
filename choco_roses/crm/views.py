@@ -4,7 +4,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect
 from main.models import (
 	Order, RoseColour, RoseAmount, RoseBoxes, RosePacking, BucketsDetails)
-
+import datetime
 
 env = environ.Env()
 environ.Env.read_env()
@@ -12,7 +12,45 @@ environ.Env.read_env()
 
 @staff_member_required
 def index(request):
-	return render(request, 'crm/index.html')
+
+	needed = Order.objects.filter(order_status='Нужно сделать')
+	process = Order.objects.filter(order_status='В процессе')
+	packed = Order.objects.filter(order_status='Упакован')
+	way = Order.objects.filter(order_status='В пути')
+	done = Order.objects.filter(order_status='Отдан')
+
+
+	orders_list = Order.objects.order_by('-given_date')
+	nearest_orders = [ord for ord in orders_list]
+
+	# list_delivery = [deliv for deliv in orders_list if deliv.delivery_data != '']
+	# list_pickup = [pickup for pickup in orders_list if pickup.pickup_data != '']
+	# nearest_orders = list_delivery + list_pickup
+	#
+	# date_list = []
+	# for dev in orders_list:
+	# 	if dev.delivery_data != '':
+	# 		dt_string = dev.delivery_data
+	# 	else:
+	# 		dt_string = dev.pickup_data
+	# 	format = "%H:%M %d/%m/%Y"
+	# 	dt_object = datetime.datetime.strptime(dt_string, format)
+	# 	date_list.append(dt_object)
+	#
+	# for i in sorted(date_list):
+	# 	print(i)
+
+
+	context = {
+		'needed': needed,
+		'process': process,
+		'packed': packed,
+		'way': way,
+		'done': done,
+		'nearest_orders': nearest_orders
+	}
+
+	return render(request, 'crm/index.html', context=context)
 
 
 # region orders
@@ -23,11 +61,13 @@ def orders_req(request):
 	from django.core.paginator import Paginator
 
 	orders = Order.objects.all()
-	paginator = Paginator(orders, 3)
 
+	# Pagination
+	paginator = Paginator(orders, 10)
 	page_number = request.GET.get('page', 1)
 	page_obj = paginator.get_page(page_number)
 	page_obj.adjusted_elided_pages = paginator.get_elided_page_range(page_number)
+
 	context = {
 		'page_obj': page_obj
 	}
@@ -56,7 +96,7 @@ def order_req(request, order_number):
 		'bucket_colours': bucket_colours
 	}
 
-	return render(request, 'crm/order-edit.html', context=context)
+	return render(request, 'crm/order.html', context=context)
 
 
 @staff_member_required
@@ -65,11 +105,14 @@ def add_order(request):
 	rose_amount = RoseAmount.objects.all()
 	boxes = RoseBoxes.objects.all()
 	rose_packing = RosePacking.objects.all()
+	last_order_num = Order.objects.last().number + 1
+
 	context = {
 		'colours': colours,
 		'rose_amount': rose_amount,
 		'boxes': boxes,
-		'rose_packing': rose_packing
+		'rose_packing': rose_packing,
+		'last_order_num': last_order_num
 	}
 
 	return render(request, 'crm/add_order.html', context=context)
@@ -79,7 +122,6 @@ def add_order(request):
 def save_order(request):
 
 	def update_order(order, order_model):
-
 		number = order.get('number', 'None')
 		total_price = order.get('total_price', 'None')
 		name_surname = order.get('name_surname', 'None')
@@ -95,6 +137,9 @@ def save_order(request):
 		pickup_data = order.get('pickup_data', 'None')
 		payment = order.get('payment', 'None')
 		description = order.get('description', 'None')
+		given_date_raw = order.get('given_date', 'None')
+		format = "%H:%M %d/%m/%Y"
+		given_date = datetime.datetime.strptime(given_date_raw, format)
 
 		# Save edited Order model
 		order_model.number = number
@@ -112,6 +157,7 @@ def save_order(request):
 		order_model.pickup_data = pickup_data
 		order_model.payment = payment
 		order_model.description = description
+		order_model.given_date = given_date
 
 		order_model.save()
 
@@ -162,7 +208,7 @@ def save_order(request):
 		description = order.get('description', 'None')
 
 		# Save Order model
-		order_model = Order.objects.create(
+		new_order_model = Order.objects.create(
 			number=number,
 			total_price=total_price,
 			name_surname=name_surname,
@@ -192,8 +238,8 @@ def save_order(request):
 			colours = ''
 			for colour in bucket_colours:
 				colours += f'{colour} '
-			bucket_model = BucketsDetails.objects.create(
-				order_id=order.id,
+			new_bucket_model = BucketsDetails.objects.create(
+				order_id=new_order_model.id,
 				colours=colours,
 				rose_amount=bucket.get('rose_amount'),
 				packing=bucket.get('packing'),
@@ -203,12 +249,13 @@ def save_order(request):
 
 
 	order = json.loads(request.POST.get('order'))
-	order_model = Order.objects.get(number=order.get('number', 'None'))
 
-	if order_model:
+	try:
+		order_model = Order.objects.get(number=order.get('number', 'None'))
 		update_order(order, order_model)
-	else:
+	except Order.DoesNotExist:
 		save_new(order)
+
 
 
 	return render(request, 'crm/index.html')
@@ -216,8 +263,8 @@ def save_order(request):
 
 @staff_member_required
 def edit_order(request, order_number):
-	order = Order.objects.get(number=order_number)
-	buckets = BucketsDetails.objects.get(order_id=order.id)
+	# order = Order.objects.get(number=order_number)
+	# buckets = BucketsDetails.objects.get(order_id=order.id)
 
 	# total_price = request.POST.get('total_price', 'None')
 	# name_surname = request.POST.get('name_surname', 'None')

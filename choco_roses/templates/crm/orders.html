@@ -251,9 +251,8 @@
                                     <td><span class="badge dark-icon-light iq-bg-primary">{{order.order_status}}</span></td>
                                    <td>
                                        <div class="flex align-items-center list-user-action">
-                                          <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add" href="#"><i class="ri-user-add-line"></i></a>
-                                          <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="{% url 'edit-order' order.id %}"><i class="ri-pencil-line"></i></a>
-                                          <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="{% url 'delete-order' order.id %}"><i class="ri-delete-bin-line"></i></a>
+                                          <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="{% url 'order' order.number %}"><i class="ri-pencil-line"></i></a>
+                                          <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="{% url 'delete-order' order.number %}"><i class="ri-delete-bin-line"></i></a>
                                        </div>
                                    </td>
                                 </tr>

@@ -1,7 +1,9 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
+
 
 
 class Client(models.Model):
@@ -96,10 +98,12 @@ class Order(models.Model):
 	instagram = models.CharField(max_length=100, default='', null=True, blank=True)
 	date = models.DateTimeField(auto_now_add=True)
 	order_type = models.CharField(max_length=100, choices=CHOICES, default='Самовывоз')
-	delivery_data = models.CharField(max_length=100, null=True, blank=True)
-	pickup_data = models.CharField(max_length=100, null=True, blank=True)
+	# delivery_data = models.CharField(max_length=100, null=True, blank=True)
+	delivery_price = models.CharField(max_length=100, null=True, blank=True)
+	# pickup_data = models.CharField(max_length=100, null=True, blank=True)
+	given_date = models.DateTimeField(null=True)
 	payment = models.CharField(max_length=100, null=True, blank=True, default='')
-	order_status = models.CharField(max_length=100, default='В процессе')
+	order_status = models.CharField(max_length=100, default='Нужно сделать')
 	from_where = models.CharField(max_length=100, blank=True, null=True, default='')
 	anonymous = models.BooleanField(default=False)
 	first_order = models.BooleanField(default=False)
