@@ -4,3 +4,7 @@ vito-lite
 migrations
 .idea
 features
+__pycache__/
+*/__pycache__/
+*.py[cod]
+.pyc

@@ -4,8 +4,14 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect
 from main.models import (
 	Order, RoseColour, RoseAmount, RoseBoxes, RosePacking, BucketsDetails)
+from django.core.paginator import Paginator
 import datetime
 
+"""
+TODO: Убрать глобальные переменные
+Написать логику отдельно
+Дописать ReadMe
+"""
 env = environ.Env()
 environ.Env.read_env()
 
@@ -19,27 +25,8 @@ def index(request):
 	way = Order.objects.filter(order_status='В пути')
 	done = Order.objects.filter(order_status='Отдан')
 
-
 	orders_list = Order.objects.order_by('-given_date')
-	nearest_orders = [ord for ord in orders_list]
-
-	# list_delivery = [deliv for deliv in orders_list if deliv.delivery_data != '']
-	# list_pickup = [pickup for pickup in orders_list if pickup.pickup_data != '']
-	# nearest_orders = list_delivery + list_pickup
-	#
-	# date_list = []
-	# for dev in orders_list:
-	# 	if dev.delivery_data != '':
-	# 		dt_string = dev.delivery_data
-	# 	else:
-	# 		dt_string = dev.pickup_data
-	# 	format = "%H:%M %d/%m/%Y"
-	# 	dt_object = datetime.datetime.strptime(dt_string, format)
-	# 	date_list.append(dt_object)
-	#
-	# for i in sorted(date_list):
-	# 	print(i)
-
+	nearest_orders = [order for order in orders_list]
 
 	context = {
 		'needed': needed,
@@ -58,11 +45,9 @@ def index(request):
 
 @staff_member_required
 def orders_req(request):
-	from django.core.paginator import Paginator
 
 	orders = Order.objects.all()
 
-	# Pagination
 	paginator = Paginator(orders, 10)
 	page_number = request.GET.get('page', 1)
 	page_obj = paginator.get_page(page_number)
@@ -138,10 +123,9 @@ def save_order(request):
 		payment = order.get('payment', 'None')
 		description = order.get('description', 'None')
 		given_date_raw = order.get('given_date', 'None')
-		format = "%H:%M %d/%m/%Y"
-		given_date = datetime.datetime.strptime(given_date_raw, format)
+		date_format = "%H:%M %d/%m/%Y"
+		given_date = datetime.datetime.strptime(given_date_raw, date_format)
 
-		# Save edited Order model
 		order_model.number = number
 		order_model.total_price = total_price
 		order_model.name_surname = name_surname
@@ -162,16 +146,11 @@ def save_order(request):
 		order_model.save()
 
 
-		# Get orders buckets from request and serialize from json
 		buckets = json.loads(request.POST.get('buckets'))
-		# Get existed order buckets
 		buckets_model = BucketsDetails.objects.filter(order_id=order_model.id)
 
-		"""
-		Save BucketsDetails model
-		"""
-		for bucket, bucket_model in zip(buckets, buckets_model):
 
+		for bucket, bucket_model in zip(buckets, buckets_model):
 			bucket_colours = bucket.get('colours')
 			rose_amount = bucket.get('rose_amount', 'None')
 			packing = bucket.get('packing', '')
@@ -190,7 +169,6 @@ def save_order(request):
 
 
 	def save_new(order):
-		# Order details
 		number = order.get('number', 'None')
 		total_price = order.get('total_price', 'None')
 		name_surname = order.get('name_surname', 'None')
@@ -207,7 +185,6 @@ def save_order(request):
 		payment = order.get('payment', 'None')
 		description = order.get('description', 'None')
 
-		# Save Order model
 		new_order_model = Order.objects.create(
 			number=number,
 			total_price=total_price,
@@ -227,12 +204,8 @@ def save_order(request):
 			description=description
 		)
 
-		# Get orders buckets from request and serialize from json
 		buckets = json.loads(request.POST.get('buckets'))
 
-		"""
-		Save BucketsDetails model
-		"""
 		for bucket in buckets:
 			bucket_colours = bucket.get('colours')
 			colours = ''
@@ -257,69 +230,7 @@ def save_order(request):
 		save_new(order)
 
 
-
 	return render(request, 'crm/index.html')
-
-
-@staff_member_required
-def edit_order(request, order_number):
-	# order = Order.objects.get(number=order_number)
-	# buckets = BucketsDetails.objects.get(order_id=order.id)
-
-	# total_price = request.POST.get('total_price', 'None')
-	# name_surname = request.POST.get('name_surname', 'None')
-	# instagram = request.POST.get('instagram', 'None')
-	# from_where = request.POST.get('from_where', 'None')
-	# address = request.POST.get('address', 'None')
-	# phone = request.POST.get('phone', 'None')
-	# order_type = request.POST.get('order_type', 'None')
-	# order_status = request.POST.get('order_status', 'None')
-	# anonymous = request.POST.get('anonymous', 'False')
-	# first_order = request.POST.get('first_order', 'False')
-	# delivery_data = request.POST.get('delivery_data', 'None')
-	# pickup_data = request.POST.get('pickup_data', 'None')
-	# payment = request.POST.get('payment', 'None')
-	# description = request.POST.get('description', 'None')
-	#
-	# # Save edited Order model
-	# order.total_price = total_price
-	# order.name_surname = name_surname
-	# order.instagram = instagram
-	# order.from_where = from_where
-	# order.address = address
-	# order.phone = phone
-	# order.order_type = order_type
-	# order.order_status = order_status
-	# order.anonymous = anonymous
-	# order.first_order = first_order
-	# order.delivery_data = delivery_data
-	# order.pickup_data = pickup_data
-	# order.payment = payment
-	# order.description = description
-	#
-	# order.save()
-	#
-	# colour1 = request.POST.get('colour1', 'None')
-	# colour2 = request.POST.get('colour2', 'None')
-	# colour3 = request.POST.get('colour3', 'None')
-	# colour4 = request.POST.get('colour4', 'None')
-	# colour5 = request.POST.get('colour5', 'None')
-	# colour6 = request.POST.get('colour6', 'None')
-	# colour7 = request.POST.get('colour7', 'None')
-	# rose_amount = request.POST.get('rose_amount', 'None')
-	# packing = request.POST.get('packing', 'None')
-	# rose_box = request.POST.get('box', 'None')
-	# price = request.POST.get('price', 'None')
-	#
-	# # Save BucketDetails model
-	# buckets.rose_amount = rose_amount
-	# buckets.packing = packing
-	# buckets.rose_box = rose_box
-	# buckets.price = price
-	#
-	# buckets.save()
-
-	return redirect(f'/crm/order/{order_number}/')
 
 
 @staff_member_required
