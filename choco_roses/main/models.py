@@ -123,3 +123,17 @@ class Order(models.Model):
 
 	def __str__(self):
 		return f'{self.number}'
+
+
+class OrderStatus(models.Model):
+	status = models.CharField(max_length=100)
+
+	def __str__(self):
+		return self.status
+
+
+class OrderType(models.Model):
+	type = models.CharField(max_length=100)
+
+	def __str__(self):
+		return self.type

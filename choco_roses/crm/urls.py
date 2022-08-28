@@ -15,6 +15,10 @@ urlpatterns = [
 	path('delete_order/<int:order_number>/', views.delete_order, name='delete-order'),
 	path('save_order/', views.save_order, name='save-order'),
 
+	path('boxes/', views.rose_boxes, name='boxes'),
+	path('packings/', views.rose_packings, name='packings'),
+	path('settings/', views.settings, name='settings'),
+
 	# path('clients/', views.clients_req, name='clients'),
 	# path('clients/<int:client_id>/', views.client_req, name='client'),
 	# path('add_client/', views.add_client, name='add-client'),
