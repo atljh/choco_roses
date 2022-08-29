@@ -35,7 +35,7 @@
                <div class="iq-dark-logo">
                   <img src="/static/images/logo-dark.gif" class="img-fluid" alt="">
                </div>
-               <span>Choco Roses</span>
+               <span>Choco</span>
                </a>
                <div class="iq-menu-bt-sidebar">
                      <div class="iq-menu-bt align-self-center">
@@ -51,7 +51,7 @@
                   <ul id="iq-sidebar-toggle" class="iq-menu">
                      <li class="iq-menu-title"><i class="ri-subtract-line"></i><span>Home</span></li>
                      <li>
-                        <a href="index.html" class="iq-waves-effect"><i class="ri-home-4-line"></i><span>Главная</span></a>
+                        <a href="{% url 'index' %}" class="iq-waves-effect"><i class="ri-home-4-line"></i><span>Главная</span></a>
                      </li>
 
                      <li class="iq-menu-title"><i class="ri-subtract-line"></i><span>Apps</span></li>
@@ -71,7 +71,7 @@
                            <li><a href="{% url 'packings' %}" class="iq-waves-effect"><i class="ri-file-list-3-line"></i><span>Упаковки</span></a></li>
                         </ul>
                      </li>
-                     <li><a href="calendar.html" class="iq-waves-effect"><i class="ri-calendar-2-line"></i><span>Календарь</span></a></li>
+                     <li><a href="{% url 'calendar' %}" class="iq-waves-effect"><i class="ri-calendar-2-line"></i><span>Календарь</span></a></li>
                      <li><a href="{% url 'settings' %}" class="iq-waves-effect"><i class="ri-settings-4-line"></i><span>Настройки</span></a></li>
                   </ul>
                </nav>

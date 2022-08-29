@@ -17,6 +17,7 @@ urlpatterns = [
 
 	path('boxes/', views.rose_boxes, name='boxes'),
 	path('packings/', views.rose_packings, name='packings'),
+	path('calendar/', views.calendar, name='calendar'),
 	path('settings/', views.settings, name='settings'),
 
 	# path('clients/', views.clients_req, name='clients'),

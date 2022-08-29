@@ -12,8 +12,8 @@ def main(request: HttpRequest) -> JsonResponse:
     }, status=200)
 
 
-def base(request: HttpRequest):
-    return render(request, 'base.html')
+def index(request: HttpRequest):
+    return render(request, 'index.html')
 
 
 

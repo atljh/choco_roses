@@ -164,5 +164,10 @@ def add_client(request):
 
 
 @staff_member_required
+def calendar(request):
+	return render(request, 'crm/calendar.html')
+
+
+@staff_member_required
 def settings(request):
-	return render(request, 'settings.html')
+	return render(request, 'crm/settings.html')
