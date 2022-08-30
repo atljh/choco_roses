@@ -1,6 +1,9 @@
 from datetime import datetime
 from main.models import Order, BucketsDetails
 import json
+from django.db.models import Count, DateTimeField
+from django.db.models.functions import Trunc
+from itertools import chain
 
 
 
@@ -120,3 +123,47 @@ def update_order(order, order_model, buckets):
 		bucket_model.rose_box = rose_box
 		bucket_model.price = price
 		bucket_model.save()
+
+
+
+
+def search_order(number):
+	order_date = search_date(number)
+	order_number = search_number(number)
+	if len(list(chain(order_date,order_number))) == 0:
+		return None
+	return list(chain(order_date,order_number))
+
+
+
+def search_date(number):
+	try:
+		date = datetime.strptime(number, "%d/%m/%Y")
+		result = Order.objects.annotate(
+			given_day=Trunc('given_date', 'day', output_field=DateTimeField())).filter(
+			given_day=date)
+	except ValueError as Exception:
+		print(Exception)
+		return []
+	except Order.DoesNotExist as Exception:
+		print(Exception)
+		return []
+	except TypeError as Exception:
+		print(Exception)
+		return []
+	return result
+
+
+def search_number(number):
+	try:
+		result = Order.objects.filter(number=number)
+	except ValueError as Exception:
+		print(Exception)
+		return []
+	except Order.DoesNotExist as Exception:
+		print(Exception)
+		return []
+	except TypeError as Exception:
+		print(Exception)
+		return []
+	return result

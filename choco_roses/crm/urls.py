@@ -9,15 +9,22 @@ from . import validators
 urlpatterns = [
 	path('', views.index, name='index'),
 	path('orders/', views.orders_req, name='orders'),
+	path('orders/search/', views.orders_req, name='search-order'),
 	path('order/<int:order_number>/', views.order_req, name='order'),
 	path('add_order/', views.add_order, name='add-order'),
 	# path('edit_order/<int:order_number>/', views.edit_order, name='edit-order'),
 	path('delete_order/<int:order_number>/', views.delete_order, name='delete-order'),
 	path('save_order/', views.save_order, name='save-order'),
+	path('save_order/', views.save_order, name='save-order'),
 
 	path('boxes/', views.rose_boxes, name='boxes'),
+	path('add_box/', views.add_box, name='add-boxes'),
+	path('delete_box/', views.delete_box, name='add-boxes'),
+	path('update_box/', views.update_box, name='add-boxes'),
 	path('packings/', views.rose_packings, name='packings'),
+	path('add_packing/', views.add_packing, name='packings'),
 	path('calendar/', views.calendar, name='calendar'),
+	path('products/', views.products, name='products'),
 	path('settings/', views.settings, name='settings'),
 
 	# path('clients/', views.clients_req, name='clients'),

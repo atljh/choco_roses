@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+
 import environ
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
@@ -6,47 +8,37 @@ from django.shortcuts import render, redirect
 from main.models import (
 	Order, RoseColour, RoseAmount, RoseBoxes, RosePacking, BucketsDetails, OrderStatus)
 from django.core.paginator import Paginator
-
-from crm.orders import save_new_order, update_order, delete_order
-
-"""
-Написать логику отдельно
-Дописать ReadMe
-"""
+from crm.orders import save_new_order, update_order, delete_order, search_order
 
 
-def get_environ():
-	env = environ.Env()
-	environ.Env.read_env()
-	return env
+
+# def get_environ():
+# 	env = environ.Env()
+# 	environ.Env.read_env()
+# 	return env
 
 
 @staff_member_required
 def index(request):
-
-	# needed = Order.objects.filter(order_status='Нужно сделать')
-	# process = Order.objects.filter(order_status='В процессе')
-	# packed = Order.objects.filter(order_status='Упакован')
-	# way = Order.objects.filter(order_status='В пути')
-	# done = Order.objects.filter(order_status='Отдан')
-
 	orders_list = Order.objects.order_by('-given_date')
 	nearest_orders = [order for order in orders_list]
 
 	order_stats = OrderStatus.objects.all()
 	data = {order_status: Order.objects.filter(order_status=order_status) for order_status in order_stats}
-
 	context = {
 		'nearest_orders': nearest_orders,
 		'data': data
 	}
-
 	return render(request, 'crm/index.html', context=context)
 
 
 # region orders
 @staff_member_required
 def orders_req(request):
+
+	number = request.GET.get('search_order', None)
+	search_result = search_order(number)
+
 	orders = Order.objects.all()
 	paginator = Paginator(orders, 10)
 	page_number = request.GET.get('page', 1)
@@ -54,7 +46,8 @@ def orders_req(request):
 	page_obj.adjusted_elided_pages = paginator.get_elided_page_range(page_number)
 
 	context = {
-		'page_obj': page_obj
+		'page_obj': page_obj,
+		'search_order': search_result,
 	}
 
 	return render(request, 'crm/orders.html', context=context)
@@ -125,12 +118,34 @@ def delete_order(request, order_id):
 		'result': 'done'
 	}
 	return JsonResponse(data)
+
+
 # endregion
 
 
 @staff_member_required
 def rose_boxes(request):
+	boxes = RoseBoxes.objects.all()
+
+	context = {
+		'boxes': boxes
+	}
 	return render(request, 'crm/rose_boxes.html')
+
+
+@staff_member_required
+def add_box(request):
+	pass
+
+
+@staff_member_required
+def delete_box(request):
+	pass
+
+
+@staff_member_required
+def update_box(request):
+	pass
 
 
 @staff_member_required
@@ -139,17 +154,27 @@ def rose_packings(request):
 
 
 @staff_member_required
-def add_rose_box(request):
+def add_packing(request):
 	pass
 
 
 @staff_member_required
-def add_rose_packing(request):
+def delete_packing(request):
+	pass
+
+
+@staff_member_required
+def update_packing(request):
 	pass
 
 
 @staff_member_required
 def add_rose_colour(request):
+	pass
+
+
+@staff_member_required
+def delete_rose_colour(request):
 	pass
 
 
@@ -166,6 +191,11 @@ def add_client(request):
 @staff_member_required
 def calendar(request):
 	return render(request, 'crm/calendar.html')
+
+
+@staff_member_required
+def products(request):
+	return render(request, 'crm/products.html')
 
 
 @staff_member_required
