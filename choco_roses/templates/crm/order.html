@@ -201,6 +201,10 @@
                                       <input type="text" class="form-control" id="number" name="number" value="{{ order.number }}">
                                   </div>
                                   <div class="form-group">
+                                      <label for="name_surname">ID клиента:</label>
+                                      <input type="text" class="form-control" id="client_id" name="client_id" value="{{ order.client_id }}">
+                                  </div>
+                                  <div class="form-group">
                                       <label for="name_surname">Имя Фамилия:</label>
                                       <input type="text" class="form-control" id="name_surname" name="name_surname" value="{{ order.name_surname }}">
                                   </div>
@@ -220,16 +224,6 @@
                                       <label for="payment">Оплата:</label>
                                       <input type="text" class="form-control" id="payment" name="payment" value="{{ order.payment }}">
                                   </div>
-<!--                                  <div class="form-group">-->
-<!--                                      <label for="delivery_data">Дата доставки:</label>-->
-<!--                                      <input type="text" class="form-control" id="delivery_data" name="delivery_data"-->
-<!--                                             placeholder="00:00 dd/mm/yyyy" value="{% if order.delivery_data != None %}{{ order.delivery_data }}{% endif %}">-->
-<!--                                  </div>-->
-<!--                                  <div class="form-group">-->
-<!--                                      <label for="pickup_data">Дата самовывоза:</label>-->
-<!--                                      <input type="text" class="form-control" id="pickup_data" name="pickup_data"-->
-<!--                                             placeholder="00:00 dd/mm/yyyy" value="{% if order.pickup_data != None %}{{ order.pickup_data }}{% endif %}">-->
-<!--                                  </div>-->
                                   <div class="form-group">
                                       <label for="given_date">Дата доставки/самовывоза:</label>
                                       <input type="text" class="form-control" id="given_date" name="given_date"
@@ -291,7 +285,12 @@
                                       <label for="description" class="form-label">Описание</label>
                                       <textarea class="form-control" id="description" rows="3" name="description">{{ order.description }}</textarea>
                                   </div>
-
+                                  <div class="form-group">
+                                     <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="customFile">
+                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                     </div>
+                                  </div>
                                   <button type="button" class="btn btn-primary" id="saveorder">Сохранить заказ</button>
                                   <button type="button" class="btn btn-primary" id="add">Добавить еще букет</button>
                               </div>
@@ -415,6 +414,6 @@
       <script src="/static/js/custom.js"></script>
 
       <!--MINE-->
-      <script src="/static/js/add_order.js"></script>
+      <script src="/static/js/order.js"></script>
    </body>
 </html>

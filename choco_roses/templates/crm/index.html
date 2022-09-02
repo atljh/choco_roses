@@ -56,7 +56,7 @@
 
                      <li class="iq-menu-title"><i class="ri-subtract-line"></i><span>Apps</span></li>
 
-                     <li><a href="todo.html" class="iq-waves-effect" aria-expanded="false"><i class="ri-chat-check-line"></i><span>Нужно сделать</span></a></li>
+                     <li><a href="{% url 'todo' %}" class="iq-waves-effect" aria-expanded="false"><i class="ri-chat-check-line"></i><span>Нужно сделать</span></a></li>
                      <li>
                         <a href="#orderinfo" class="iq-waves-effect collapsed" data-toggle="collapse" aria-expanded="false"><i class="ri-profile-line"></i><span>Заказы</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
                         <ul id="orderinfo" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
@@ -93,13 +93,16 @@
                               <h4 class="card-title">{{ status }}</h4>
                            </div>
                            <div class="iq-card-header-toolbar d-flex align-items-center">
-                              <div class="dropdown">
-                                 <span class="dropdown-toggle" id="dropdown-needed" data-toggle="dropdown" >
-                                 <i class="ri-more-fill"></i>
+                           <div class="dropdown">
+                                 <span class="dropdown-toggle text-primary" id="dropdownMenuButton6" data-toggle="dropdown" aria-expanded="false">
+                                 <i class="ri-more-2-fill"></i>
                                  </span>
-                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton-four" style="">
+                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton6" style="">
                                     <a class="dropdown-item" href="#"><i class="ri-eye-fill mr-2"></i>View</a>
+                                    <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-fill mr-2"></i>Delete</a>
                                     <a class="dropdown-item" href="#"><i class="ri-pencil-fill mr-2"></i>Edit</a>
+                                    <a class="dropdown-item" href="#"><i class="ri-printer-fill mr-2"></i>Print</a>
+                                    <a class="dropdown-item" href="#"><i class="ri-file-download-fill mr-2"></i>Download</a>
                                  </div>
                               </div>
                            </div>

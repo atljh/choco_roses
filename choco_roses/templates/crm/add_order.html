@@ -228,11 +228,11 @@
                         <div class="iq-card-body">
                             <div class="form-group">
                                 <label for="name_surname">Номер:</label>
-                                <input type="text" class="form-control" id="number" name="number" value="{{ last_order_num }}">
+                                <input type="text" class="form-control" id="number" name="number" value="{% if last_order_num != None %} {{ last_order_num }} {% else %}{% endif %}" required="">
                             </div>
                             <div class="form-group">
                                 <label for="name_surname">Имя Фамилия:</label>
-                                <input type="text" class="form-control" id="name_surname" name="name_surname" value="">
+                                <input type="text" class="form-control" id="name_surname" name="name_surname" value="" required>
                             </div>
                             <div class="form-group">
                                 <label for="address">Адрес:</label>
@@ -251,13 +251,8 @@
                                 <input type="text" class="form-control" id="payment" name="payment" value="">
                             </div>
                             <div class="form-group">
-                                <label for="delivery_data">Дата доставки:</label>
-                                <input type="text" class="form-control" id="delivery_data" name="delivery_data"
-                                       placeholder="00:00 dd/mm/yyyy" value="">
-                            </div>
-                            <div class="form-group">
-                                <label for="pickup_data">Дата самовывоза:</label>
-                                <input type="text" class="form-control" id="pickup_data" name="pickup_data"
+                                <label for="given_date">Дата доставки/самовывоза:</label>
+                                <input type="text" class="form-control" id="given_date" name="given_date"
                                        placeholder="00:00 dd/mm/yyyy" value="">
                             </div>
                             <div class="form-group">
@@ -306,21 +301,22 @@
                 <!-- Orders bucket -->
                 <div class="col-lg-3 bucket" id="bucket">
                     <div class="iq-card">
-                        <div class="iq-card-header d-flex justify-content-between">
-                            <div class="iq-header-title">
-                                <h4 class="card-title">Добавить букет</h4>
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">Добавить букет</h4>
+                                </div>
                             </div>
-                        </div>
-                        <div class="iq-card-body" id="col">
+                            <div class="iq-card-body" id="col">
                             <div class="form-group colour_table" id="colour_table">
                                 <div class="form-group" id="colour">
                                     <label>Выберите цвет:</label>
-                                    <select class="form-control" id="colours" name="colours">
-                                        <option selected></option>
+                                    <select class="form-control" id="colours" name="colours" required="">
+                                        <option value=""></option>
                                         {% for colour in colours %}
                                         <option>{{colour.colour}}</option>
                                         {% endfor %}
                                     </select>
+                                    <div class="invalid-feedback">Example invalid custom select feedback</div>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary" id="addcolour">Добавить еще цвет</button>
@@ -417,7 +413,7 @@
 
 
 <!--MINE-->
-<script src="/static/js/add_order.js"></script>
+<script src="/static/js/order.js"></script>
 
 
 </body>

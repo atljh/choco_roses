@@ -1,21 +1,19 @@
 import json
-from datetime import datetime
-
 import environ
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from main.models import (
+from crm.models import (
 	Order, RoseColour, RoseAmount, RoseBoxes, RosePacking, BucketsDetails, OrderStatus)
 from django.core.paginator import Paginator
 from crm.orders import save_new_order, update_order, delete_order, search_order
 
 
 
-# def get_environ():
-# 	env = environ.Env()
-# 	environ.Env.read_env()
-# 	return env
+def get_environ():
+	env = environ.Env()
+	environ.Env.read_env()
+	return env
 
 
 @staff_member_required
@@ -82,7 +80,11 @@ def add_order(request):
 	rose_amount = RoseAmount.objects.all()
 	boxes = RoseBoxes.objects.all()
 	rose_packing = RosePacking.objects.all()
-	last_order_num = Order.objects.last().number + 1
+
+	try:
+		last_order_num = Order.objects.last().number + 1
+	except AttributeError:
+		last_order_num = None
 
 	context = {
 		'colours': colours,
@@ -130,17 +132,17 @@ def rose_boxes(request):
 	context = {
 		'boxes': boxes
 	}
-	return render(request, 'crm/rose_boxes.html')
+	return render(request, 'crm/rose-boxes.html')
 
 
 @staff_member_required
-def add_box(request):
-	pass
+def add_box(request, rose_box_id):
+	return render(request, 'crm/rose-boxes.html')
 
 
 @staff_member_required
 def delete_box(request):
-	pass
+	return redirect('crm/rose-boxes/')
 
 
 @staff_member_required
@@ -201,3 +203,8 @@ def products(request):
 @staff_member_required
 def settings(request):
 	return render(request, 'crm/settings.html')
+
+
+@staff_member_required
+def todo(request):
+	return render(request, 'crm/todo.html')

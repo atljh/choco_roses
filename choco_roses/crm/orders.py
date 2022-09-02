@@ -1,7 +1,7 @@
 from datetime import datetime
-from main.models import Order, BucketsDetails
+from crm.models import Order, BucketsDetails
 import json
-from django.db.models import Count, DateTimeField
+from django.db.models import DateTimeField
 from django.db.models.functions import Trunc
 from itertools import chain
 
@@ -27,10 +27,11 @@ def save_new_order(order, buckets, user):
 	order_status = order.get('order_status')
 	anonymous = order.get('anonymous', 'False')
 	first_order = order.get('first_order', 'False')
-	delivery_data = order.get('delivery_data', 'None')
-	pickup_data = order.get('pickup_data', 'None')
 	payment = order.get('payment', 'None')
 	description = order.get('description', 'None')
+	given_date_raw = order.get('given_date', 'None')
+	date_format = "%H:%M %d/%m/%Y"
+	given_date = datetime.strptime(given_date_raw, date_format)
 
 	new_order_model = Order.objects.create(
 		number=number,
@@ -44,8 +45,7 @@ def save_new_order(order, buckets, user):
 		order_status=order_status,
 		anonymous=bool(anonymous),
 		first_order=bool(first_order),
-		delivery_data=delivery_data,
-		pickup_data=pickup_data,
+		given_date=given_date,
 		payment=payment,
 		created_by=str(user),
 		description=description
@@ -68,6 +68,7 @@ def save_new_order(order, buckets, user):
 
 
 def update_order(order, order_model, buckets):
+	client_id = order.get('client_id', None)
 	number = order.get('number', 'None')
 	total_price = order.get('total_price', 'None')
 	name_surname = order.get('name_surname', 'None')
@@ -79,14 +80,13 @@ def update_order(order, order_model, buckets):
 	order_status = order.get('order_status')
 	anonymous = order.get('anonymous', 'False')
 	first_order = order.get('first_order', 'False')
-	delivery_data = order.get('delivery_data', 'None')
-	pickup_data = order.get('pickup_data', 'None')
 	payment = order.get('payment', 'None')
 	description = order.get('description', 'None')
 	given_date_raw = order.get('given_date', 'None')
 	date_format = "%H:%M %d/%m/%Y"
 	given_date = datetime.strptime(given_date_raw, date_format)
 
+	order.client_id = client_id
 	order_model.number = number
 	order_model.total_price = total_price
 	order_model.name_surname = name_surname
@@ -98,15 +98,12 @@ def update_order(order, order_model, buckets):
 	order_model.order_status = order_status
 	order_model.anonymous = anonymous
 	order_model.first_order = first_order
-	order_model.delivery_data = delivery_data
-	order_model.pickup_data = pickup_data
+	order_model.given_date = given_date
 	order_model.payment = payment
 	order_model.description = description
-	order_model.given_date = given_date
 	order_model.save()
 
 	buckets_model = BucketsDetails.objects.filter(order_id=order_model.id)
-
 	for bucket, bucket_model in zip(buckets, buckets_model):
 		bucket_colours = bucket.get('colours')
 		rose_amount = bucket.get('rose_amount', 'None')
