@@ -6,8 +6,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Client(models.Model):
 	name = models.CharField(max_length=240)
-	phone = models.CharField(max_length=14, null=True)
-	instagram = models.CharField(max_length=50, null=True)
+	phone = models.CharField(max_length=20, null=True)
+	instagram = models.CharField(max_length=100, null=True)
+	from_where = models.CharField(max_length=100, null=True)
 	address = models.CharField(max_length=300, null=True)
 	email = models.EmailField(max_length=240, null=True)
 	date_created = models.DateTimeField(auto_now_add=True)

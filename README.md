@@ -1,8 +1,9 @@
-# A Customer Relationship Management system for 
+# A Customer Relationship Management system for Choco Rose business
 
 
-How to run: 
+How to run:
 
 ./manage.py makemigrations && ./manage.py  migrate
+
 ./manage.py runserver
 

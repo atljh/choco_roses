@@ -136,12 +136,12 @@ def rose_boxes(request):
 
 
 @staff_member_required
-def add_box(request, rose_box_id):
+def add_box(request):
 	return render(request, 'crm/rose-boxes.html')
 
 
 @staff_member_required
-def delete_box(request):
+def delete_box(request, box_id):
 	return redirect('crm/rose-boxes/')
 
 

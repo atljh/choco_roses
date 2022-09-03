@@ -18,7 +18,7 @@ urlpatterns = [
 
 	path('boxes/', views.rose_boxes, name='boxes'),
 	path('add_box/', views.add_box, name='add-boxes'),
-	path('delete_box/', views.delete_box, name='add-boxes'),
+	path('delete_box/<int:box_id>', views.delete_box, name='add-boxes'),
 	path('update_box/', views.update_box, name='add-boxes'),
 	path('packings/', views.rose_packings, name='packings'),
 	path('add_packing/', views.add_packing, name='add-packing'),

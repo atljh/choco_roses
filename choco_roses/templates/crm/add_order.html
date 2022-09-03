@@ -231,6 +231,10 @@
                                 <input type="text" class="form-control" id="number" name="number" value="{% if last_order_num != None %} {{ last_order_num }} {% else %}{% endif %}" required="">
                             </div>
                             <div class="form-group">
+                                      <label for="name_surname">ID клиента:</label>
+                                      <input type="text" class="form-control" id="client_id" name="client_id" value="{{ order.client_id }}">
+                            </div>
+                            <div class="form-group">
                                 <label for="name_surname">Имя Фамилия:</label>
                                 <input type="text" class="form-control" id="name_surname" name="name_surname" value="" required>
                             </div>
@@ -413,7 +417,7 @@
 
 
 <!--MINE-->
-<script src="/static/js/order.js"></script>
+<script src="/static/js/orders.js"></script>
 
 
 </body>

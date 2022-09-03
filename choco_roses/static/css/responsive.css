@@ -18,7 +18,7 @@ NOTE: This file contains the styling for responsive Template.
 	.iq-email-to-list .justify-content-between {float: left; width: 900px;}
 	.iq-chat-ui li a{padding: 20px 0;}
 	.chat-sidebar-channel .avatar, .avatar{margin-right: 10px !important;}
-	.chat-sidebar-channel .avatar > img{height: 40px; width: 40px;}
+	.chat-sidebar-channel .avatar > img{height: 40px; width: 40px;}content
 	.chat-sidebar-name > h6 {font-size: 14px;}
 	.chat-sidebar-name span{font-size: 12px;}
 
@@ -319,7 +319,7 @@ NOTE: This file contains the styling for responsive Template.
 	/* .iq-top-navbar .navbar-toggler { right: 100px; } */
 	/* .iq-top-navbar .iq-navbar-custom .iq-menu-bt { right: 145px; } */
 	.navbar-collapse { top:95px; border-radius: 8px; }
-	.content-page, body.sidebar-main .content-page { padding: 140px 0 0; }
+	.content-page, body.sidebar-main .content-page { padding: 20px 0 0; }
 	.iq-top-navbar .iq-sub-dropdown { width: 225px; left: auto; right: 0; margin: 0 auto; }
 	/* .navbar-left { margin-bottom: 20px; } */
 	.topbar-menu-icon li a { margin: 0 0 0 10px; }

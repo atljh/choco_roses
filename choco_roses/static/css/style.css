@@ -401,7 +401,7 @@ ul#topbar-data-icon { margin: -30px 10px 0; }
 /*---------------------------------------------------------------------
                               Content Page
 -----------------------------------------------------------------------*/
-.content-page { margin-left: 260px; overflow: hidden; padding: 0px 15px 0; min-height: 100vh; -webkit-transition: all 0.3s ease-out 0s; -moz-transition: all 0.3s ease-out 0s; -ms-transition: all 0.3s ease-out 0s; -o-transition: all 0.3s ease-out 0s; transition: all 0.3s ease-out 0s; }
+.content-page { margin-left: 260px; overflow: hidden; padding: 20px 15px 0; min-height: 100vh; -webkit-transition: all 0.3s ease-out 0s; -moz-transition: all 0.3s ease-out 0s; -ms-transition: all 0.3s ease-out 0s; -o-transition: all 0.3s ease-out 0s; transition: all 0.3s ease-out 0s; }
 .iq-user-dropdown { width: 350px; }
 body.sidebar-main .iq-top-navbar { width: calc(100% - 140px); }
 body.sidebar-main .iq-top-navbar.fixed-header { width: calc(100% - 80px); }
