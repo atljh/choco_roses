@@ -128,46 +128,79 @@ def delete_order(request, order_id):
 @staff_member_required
 def rose_boxes(request):
 	boxes = RoseBoxes.objects.all()
-
 	context = {
 		'boxes': boxes
 	}
-	return render(request, 'crm/rose-boxes.html')
+	return render(request, 'crm/rose-boxes.html', context=context)
 
 
 @staff_member_required
 def add_box(request):
-	return render(request, 'crm/rose-boxes.html')
+	box_name = request.POST.get('box_name')
+	RoseBoxes.objects.create(rose_box=box_name)
+	return JsonResponse({'status': 'good'})
 
 
 @staff_member_required
-def delete_box(request, box_id):
-	return redirect('crm/rose-boxes/')
+def delete_box(request):
+	box_id = request.POST.get('box_id')
+	RoseBoxes.objects.get(id=box_id).delete()
+	return JsonResponse({'status': 'good'})
 
 
 @staff_member_required
 def update_box(request):
-	pass
+	box_name = request.POST.get('box_name')
+	box_id = request.POST.get('box_id')
+	box = RoseBoxes.objects.get(id=box_id)
+	box.rose_box = box_name
+	box.save()
+	return JsonResponse({'response': 'good'})
 
 
 @staff_member_required
 def rose_packings(request):
-	return render(request, 'crm/rose_packings.html')
+	packings = RosePacking.objects.all()
+	context = {
+		'packings': packings
+	}
+	return render(request, 'crm/rose-packings.html', context=context)
 
 
 @staff_member_required
 def add_packing(request):
-	pass
+	packing_name = request.POST.get('packing_name')
+	try:
+		RosePacking.objects.create(rose_packing=packing_name)
+	except Exception as exc:
+		print(exc)
+		return JsonResponse({'response': 'error'})
+	return JsonResponse({'response': 'good'})
 
 
 @staff_member_required
 def delete_packing(request):
-	pass
+	packing_id = request.POST.get('packing_id')
+	try:
+		RosePacking.objects.get(id=packing_id).delete()
+	except Exception as exc:
+		print(exc)
+		return JsonResponse({'response': 'error'}, status=500)
+	return JsonResponse({'response': 'good'}, status=200)
 
 
 @staff_member_required
 def update_packing(request):
-	pass
+	packing_id = request.POST.get('packing_id')
+	packing_name = request.POST.get('packing_name')
+	try:
+		packing = RosePacking.objects.get(id=packing_id)
+		packing.rose_packing = packing_name
+		packing.save()
+	except Exception as exc:
+		print(exc)
+		return JsonResponse({'response': 'error'}, status=500)
+	return JsonResponse({'status': 'good'})
 
 
 @staff_member_required

@@ -89,28 +89,28 @@
                        <div class="iq-card">
                            <div class="iq-card-header d-flex justify-content-between">
                                <div class="iq-header-title">
-                                  <h4 class="card-title">Коробки</h4>
+                                  <h4 class="card-title">Упаковки</h4>
                                </div>
                            </div>
                            <div class="iq-card-body">
                                <div id="table" class="table-editable">
-                                    <span class="box-add float-right mb-0 mr-2">
+                                    <span class="packing-add float-right mb-0 mr-2">
                                         <button class="btn btn-sm iq-bg-success"><i class="ri-add-fill">
                                             <span class="pl-1">Добавить</span></i>
                                         </button>
                                     </span>
                                    <div class="col-md-4 mb-2 float-right">
-                                       <input type="text" class="form-control" id="box-add-input" required="">
+                                       <input type="text" class="form-control" id="packing-add-input" required="">
                                    </div>
                                    <table class="table mb-0 table-borderless">
                                        <thead>
                                        </thead>
                                        <tbody>
-                                       {% for box in boxes %}
+                                       {% for packing in packings %}
                                            <tr>
-                                               <td contenteditable="true" class="{{ box.id }}" id="box-name-label">{{ box.rose_box }}</td>
+                                               <td contenteditable="true" class="{{ packing.id }}" id="packing-name-label">{{ packing.rose_packing }}</td>
                                                <td>
-                                                    <i class="ri-delete-bin-5-line text-danger box-remove"></i>
+                                                    <i class="ri-delete-bin-5-line text-danger packing-remove"></i>
                                                </td>
                                            </tr>
                                        {% endfor %}
