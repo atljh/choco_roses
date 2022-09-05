@@ -113,21 +113,28 @@ def save_order(request):
 
 
 @staff_member_required
-def delete_order(request, order_id):
-	order = Order.objects.get(id=order_id)
-	order.delete()
-	data = {
-		'result': 'done'
-	}
-	return JsonResponse(data)
+def delete_order(order_id):
+	try:
+		order = Order.objects.get(id=order_id)
+		order.delete()
+	except Order.DoesNotExist as exc:
+		return JsonResponse({'error': exc}, status=500)
+	except Exception as exc:
+		return JsonResponse({'error': exc}, status=500)
+	return JsonResponse({'response': 'good'}, status=200)
 
 
 # endregion
 
 
+# region boxes
+
 @staff_member_required
 def rose_boxes(request):
-	boxes = RoseBoxes.objects.all()
+	try:
+		boxes = RoseBoxes.objects.all()
+	except Exception as exc:
+		return JsonResponse({'error': exc}, status=500)
 	context = {
 		'boxes': boxes
 	}
@@ -137,14 +144,28 @@ def rose_boxes(request):
 @staff_member_required
 def add_box(request):
 	box_name = request.POST.get('box_name')
-	RoseBoxes.objects.create(rose_box=box_name)
-	return JsonResponse({'status': 'good'})
+	try:
+		box = RoseBoxes.objects.create(rose_box=box_name)
+	except TypeError as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+	except Exception as exc:
+		return JsonResponse({'error': exc}, status=500)
+
+	return JsonResponse({'status': 'good', 'box_id': box.id})
 
 
 @staff_member_required
 def delete_box(request):
 	box_id = request.POST.get('box_id')
-	RoseBoxes.objects.get(id=box_id).delete()
+	try:
+		RoseBoxes.objects.get(id=box_id).delete()
+	except RoseBoxes.DoesNotExist as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+	except TypeError as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+	except Exception as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+
 	return JsonResponse({'status': 'good'})
 
 
@@ -152,15 +173,29 @@ def delete_box(request):
 def update_box(request):
 	box_name = request.POST.get('box_name')
 	box_id = request.POST.get('box_id')
-	box = RoseBoxes.objects.get(id=box_id)
-	box.rose_box = box_name
-	box.save()
+	try:
+		box = RoseBoxes.objects.get(id=box_id)
+		box.rose_box = box_name
+		box.save()
+	except RoseBoxes.DoesNotExist as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+	except TypeError as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+	except Exception as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+
 	return JsonResponse({'response': 'good'})
+
+# endregion
 
 
 @staff_member_required
 def rose_packings(request):
-	packings = RosePacking.objects.all()
+	try:
+		packings = RosePacking.objects.all()
+	except Exception as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+
 	context = {
 		'packings': packings
 	}
@@ -171,11 +206,11 @@ def rose_packings(request):
 def add_packing(request):
 	packing_name = request.POST.get('packing_name')
 	try:
-		RosePacking.objects.create(rose_packing=packing_name)
+		packing = RosePacking.objects.create(rose_packing=packing_name)
 	except Exception as exc:
-		print(exc)
-		return JsonResponse({'response': 'error'})
-	return JsonResponse({'response': 'good'})
+		return JsonResponse({'error': f'{exc}'}, status=500)
+
+	return JsonResponse({'response': 'good', 'packing_id': packing.id}, status=200)
 
 
 @staff_member_required
@@ -184,9 +219,9 @@ def delete_packing(request):
 	try:
 		RosePacking.objects.get(id=packing_id).delete()
 	except Exception as exc:
-		print(exc)
-		return JsonResponse({'response': 'error'}, status=500)
-	return JsonResponse({'response': 'good'}, status=200)
+		return JsonResponse({'error': f'{exc}'}, status=500)
+
+	return JsonResponse({'status': 'good'}, status=200)
 
 
 @staff_member_required
@@ -198,8 +233,7 @@ def update_packing(request):
 		packing.rose_packing = packing_name
 		packing.save()
 	except Exception as exc:
-		print(exc)
-		return JsonResponse({'response': 'error'}, status=500)
+		return JsonResponse({'response': exc}, status=500)
 	return JsonResponse({'status': 'good'})
 
 

@@ -100,7 +100,7 @@
                                         </button>
                                     </span>
                                    <div class="col-md-4 mb-2 float-right">
-                                       <input type="text" class="form-control" id="packing-add-input" required="">
+                                       <input type="text" class="form-control packing-add-input" required="">
                                    </div>
                                    <table class="table mb-0 table-borderless">
                                        <thead>
@@ -108,7 +108,7 @@
                                        <tbody>
                                        {% for packing in packings %}
                                            <tr class="packings">
-                                               <td contenteditable="true" class="{{ packing.id }}" id="packing-name-label">{{ packing.rose_packing }}</td>
+                                               <td contenteditable="true" id="{{ packing.id }}" class="packing-name-label">{{ packing.rose_packing }}</td>
                                                <td>
                                                     <i class="ri-delete-bin-5-line text-danger packing-remove"></i>
                                                </td>

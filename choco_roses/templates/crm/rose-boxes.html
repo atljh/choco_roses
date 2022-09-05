@@ -100,7 +100,7 @@
                                         </button>
                                     </span>
                                    <div class="col-md-4 mb-2 float-right">
-                                       <input type="text" class="form-control" id="box-add-input" required="">
+                                       <input type="text" class="form-control box-add-input" required="">
                                    </div>
                                    <table class="table mb-0 table-borderless">
                                        <thead>
@@ -108,7 +108,8 @@
                                        <tbody>
                                        {% for box in boxes %}
                                            <tr class="boxes">
-                                               <td contenteditable="true" class="{{ box.id }}" id="box-name-label">{{ box.rose_box }}</td>
+                                               <td contenteditable="true" id="{{ box.id }}" class="box-name-label">{{ box.rose_box }}</td>
+<!--                                               <td contenteditable="true" id="1334" class="box-name-label">BOX</td>-->
                                                <td>
                                                     <i class="ri-delete-bin-5-line text-danger box-remove"></i>
                                                </td>
