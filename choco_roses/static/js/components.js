@@ -21,12 +21,14 @@ const $tableID = $("#table"),
 	$BTN = $("#export-btn"),
 	$EXPORT = $("#export");
 
+
 $(".box-add").on("click", "i", () => {
 	var box_name = $("#box-add-input").val();
 	var box_id = $(this).attr('class');
-    let newTr = `\n<tr class="hide">\n  <td class="pt-3-half" contenteditable="true">${box_name}</td><td><i class="ri-delete-bin-5-line text-danger box-remove"></i></td>\n</tr>`;
+    let newTr = `\n<tr class="boxes">\n  <td id="box-name-label "class=${box_id} contenteditable="true">${box_name}</td><td><i class="ri-delete-bin-5-line text-danger box-remove"></i></td>\n</tr>`;
     //0 === $tableID.find("tbody tr").length &&
-    $tableID.find("table").append(newTr)
+
+    $tableID.find("tbody").append(newTr)
     $.ajax({
         data: {
             'box_id': box_id,
@@ -67,7 +69,8 @@ $tableID.on("click", ".box-remove", function() {
     });
 
 
-$('tr').on('blur', 'td[contenteditable]', function() {
+$('.boxes').on('blur', 'td[contenteditable]', function() {
+
     var box_name = $(this).parents("tr").find('#box-name-label').text()
     var box_id = $(this).attr('class');
     $.ajax({
@@ -97,8 +100,9 @@ $('tr').on('blur', 'td[contenteditable]', function() {
 $(".packing-add").on("click", "i", () => {
 	var packing_name = $("#packing-add-input").val();
 	var packing_id = $(this).attr('class');
-    let newTr = `\n<tr class="hide">\n  <td class="pt-3-half" contenteditable="true">${packing_name}</td><td><i class="ri-delete-bin-5-line text-danger box-remove"></i></td>\n</tr>`;
+    let newTr = `\n<tr class="packings">\n  <td class="packing-name-label" contenteditable="true">${packing_name}</td><td><i class="ri-delete-bin-5-line text-danger box-remove"></i></td>\n</tr>`;
     //0 === $tableID.find("tbody tr").length &&
+
     $tableID.find("table").append(newTr)
     $.ajax({
         data: {
@@ -140,7 +144,7 @@ $tableID.on("click", ".packing-remove", function() {
     });
 
 
-$('tr').on('blur', 'td[contenteditable]', function() {
+$('.packings').on('blur', 'td[contenteditable]', function() {
     var packing_name = $(this).parents("tr").find('#packing-name-label').text()
     var packing_id = $(this).attr('class');
     $.ajax({
