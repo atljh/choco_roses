@@ -17,7 +17,7 @@ $(".box-add").on("click", "i", () => {
 
         success: function (response) {
                 console.log(response.box_id)
-                let newTr = `\n<tr class="boxes" onfocusout="change();">\n  <td class="box-name-label" id=${response.box_id} contenteditable="true">${box_name}</td><td><i class="ri-delete-bin-5-line text-danger box-remove"></i></td>\n</tr>`;
+                let newTr = `\n<tr class="boxes" onfocusout="change()">\n  <td class="box-name-label" id=${response.box_id} contenteditable="true">${box_name}</td><td><i class="ri-delete-bin-5-line text-danger box-remove"></i></td>\n</tr>`;
                 $tableID.find("table").find("tbody").append(newTr);
                 },
         error: function (response) {
@@ -27,10 +27,6 @@ $(".box-add").on("click", "i", () => {
 }),
 
 
-
-function functionTest() {
-    console.log('this works');
-}
 
 
 $tableID.on("click", ".box-remove", function () {
@@ -110,8 +106,8 @@ $(".packing-add").on("click", "i", () => {
 
         success: function (response) {
             if (response.response === 'good') {
-                let newTr = `\n<tr class="packings">\n  <td class="packing-name-label" id=${response.packing_id} contenteditable="true">${packing_name}</td><td><i class="ri-delete-bin-5-line text-danger packing-remove"></i></td>\n</tr>`;
-                $tableID.find("table").append(newTr)
+                let newTr = `\n<tr class="packings" onfocusout="change()">\n  <td class="packing-name-label" id=${response.packing_id} contenteditable="true">${packing_name}</td><td><i class="ri-delete-bin-5-line text-danger packing-remove"></i></td>\n</tr>`;
+                $tableID.find("table").find("tbody").append(newTr)
             }
             else {
                 alert(response.error);

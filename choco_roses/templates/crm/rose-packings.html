@@ -106,8 +106,33 @@
                                        <thead>
                                        </thead>
                                        <tbody>
+                                       <script type="text/javascript">
+                                            function change() {
+                                                    $('.packings').on('blur', 'td[contenteditable]', function() {
+                                                        var packing_name = $(this).parents("tr").find('.packing-name-label').text()
+                                                        var packing_id = $(this).attr('id');
+                                                        var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
+                                                        $.ajax({
+                                                            data: {
+                                                                'packing_id': packing_id,
+                                                                'packing_name': packing_name,
+                                                                'csrfmiddlewaretoken': csrftoken,
+                                                                },
+                                                            type: "POST",
+                                                            url: "/crm/update_packing/",
+
+                                                            success: function (response){
+                                                                },
+                                                            error: function(response){
+                                                                alert("failure");
+                                                                }
+                                                        })
+                                                    });
+                                            }
+                                        </script>
+                                       {% csrf_token %}
                                        {% for packing in packings %}
-                                                   {% csrf_token %}
                                            <tr class="packings">
                                                <td contenteditable="true" id="{{ packing.id }}" class="packing-name-label">{{ packing.rose_packing }}</td>
                                                <td>
