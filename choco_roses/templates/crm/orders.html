@@ -273,6 +273,7 @@
                              </thead>
                              <tbody>
                              {% for order in page_obj %}
+                                 {% csrf_token %}
                                 <tr>
                                     <td><a href="/crm/order/{{order.number}}">{{order.number}}</a></td>
                                     <td>{{order.given_date|date:"H:i d/m/Y"}}</td>
@@ -285,7 +286,7 @@
                                    <td>
                                        <div class="flex align-items-center list-user-action">
                                           <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="{% url 'order' order.number %}"><i class="ri-pencil-line"></i></a>
-                                          <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="{% url 'delete-order' order.number %}"><i class="ri-delete-bin-line"></i></a>
+                                          <a class="iq-bg-primary deleteorder" order_number="{{order.number}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="ri-delete-bin-line"></i></a>
                                        </div>
                                    </td>
                                 </tr>
@@ -376,5 +377,8 @@
       <script src="/static/js/chart-custom.js"></script>
       <!-- Custom JavaScript -->
       <script src="/static/js/custom.js"></script>
+
+
+      <script src="/static/js/orders.js"></script>
 </body>
 </html>

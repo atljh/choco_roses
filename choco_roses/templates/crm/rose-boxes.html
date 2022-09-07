@@ -106,10 +106,44 @@
                                        <thead>
                                        </thead>
                                        <tbody>
+                                        <script type="text/javascript">
+                                            function change() {
+                                                    $('.boxes').on('blur', 'td[contenteditable]', function() {
+                                                        var box_name = $(this).parents("tr").find('.box-name-label').text()
+                                                        var box_id = $(this).attr('id');
+                                                        var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
+                                                        $.ajax({
+                                                            data: {
+                                                                'box_id': box_id,
+                                                                'box_name': box_name,
+                                                                'csrfmiddlewaretoken': csrftoken,
+                                                                },
+                                                            type: "POST",
+                                                            url: "/crm/update_box/",
+
+                                                            success: function (response) {
+                                                                if (response.response) {
+                                                                    console.log('Ok')
+                                                                }
+                                                                else {
+                                                                    alert(response.error);
+                                                                }
+                                                            },
+                                                            error: function(){
+                                                                alert("Error");
+                                                            }
+                                                        })
+                                                    });
+                                            }
+                                        </script>
+
+                                        {% csrf_token %}
                                        {% for box in boxes %}
+
+
                                            <tr class="boxes">
                                                <td contenteditable="true" id="{{ box.id }}" class="box-name-label">{{ box.rose_box }}</td>
-<!--                                               <td contenteditable="true" id="1334" class="box-name-label">BOX</td>-->
                                                <td>
                                                     <i class="ri-delete-bin-5-line text-danger box-remove"></i>
                                                </td>

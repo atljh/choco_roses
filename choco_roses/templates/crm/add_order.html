@@ -311,49 +311,55 @@
                                 </div>
                             </div>
                             <div class="iq-card-body" id="col">
-                            <div class="form-group colour_table" id="colour_table">
-                                <div class="form-group" id="colour">
-                                    <label>Выберите цвет:</label>
-                                    <select class="form-control" id="colours" name="colours" required="">
-                                        <option value=""></option>
-                                        {% for colour in colours %}
-                                        <option>{{colour.colour}}</option>
+                                <div class="form-group colour_table" id="colour_table">
+                                    <div class="form-group" id="colour">
+                                        <label>Выберите цвет:</label>
+                                        <select class="form-control" id="colours" name="colours" required="">
+                                            <option value=""></option>
+                                            {% for colour in colours %}
+                                            <option>{{colour.colour}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <div class="invalid-feedback">Example invalid custom select feedback</div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary" id="addcolour">Добавить еще цвет</button>
+                                <div class="form-group">
+                                    <label>Выберите количество роз:</label>
+                                    <select class="form-control" id="rose_amount" name="rose_amount">
+                                        {% for amount in rose_amount %}
+                                        <option>{{amount.rose_amount}}</option>
                                         {% endfor %}
                                     </select>
-                                    <div class="invalid-feedback">Example invalid custom select feedback</div>
                                 </div>
-                            </div>
-                            <button type="button" class="btn btn-primary" id="addcolour">Добавить еще цвет</button>
-                            <div class="form-group">
-                                <label>Выберите количество роз:</label>
-                                <select class="form-control" id="rose_amount" name="rose_amount">
-                                    {% for amount in rose_amount %}
-                                    <option>{{amount.rose_amount}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Выберите упаковку:</label>
-                                <select class="form-control" id="packing" name="packing">
-                                    <option selected>{{ buckets.packing}}</option>
-                                    {% for pack in rose_packing %}
-                                    <option>{{pack.rose_packing}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Выберите коробку:</label>
-                                <select class="form-control" id="rose_box" name="rose_box">
-                                    <option selected></option>
-                                    {% for box in boxes %}
-                                    <option>{{box.rose_box}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="price">Цена:</label>
-                                <input type="text" class="form-control" id="price" name="price" value="">
-                            </div>
+                                <div class="form-group">
+                                    <label>Выберите упаковку:</label>
+                                    <select class="form-control" id="packing" name="packing">
+                                        <option selected>{{ buckets.packing}}</option>
+                                        {% for pack in rose_packing %}
+                                        <option>{{pack.rose_packing}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Выберите коробку:</label>
+                                    <select class="form-control" id="rose_box" name="rose_box">
+                                        <option selected></option>
+                                        {% for box in boxes %}
+                                        <option>{{box.rose_box}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">Цена:</label>
+                                    <input type="text" class="form-control" id="price" name="price" value="">
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="customFile">
+                                        <label class="custom-file-label" for="customFile">Выберите файл: </label>
+                                    </div>
+                                </div>
                         </div>
                     </div>
                 </div>

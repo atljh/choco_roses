@@ -1,22 +1,3 @@
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-const csrftoken = getCookie('csrftoken');
-
-
-
-
 const $tableID = $("#table"),
 	$BTN = $("#export-btn"),
 	$EXPORT = $("#export");
@@ -24,7 +5,7 @@ const $tableID = $("#table"),
 
 $(".box-add").on("click", "i", () => {
 	var box_name = $(".box-add-input").val();
-    //0 === $tableID.find("tbody tr").length &&
+	var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
 
     $.ajax({
         data: {
@@ -36,8 +17,8 @@ $(".box-add").on("click", "i", () => {
 
         success: function (response) {
                 console.log(response.box_id)
-                let newTr = `\n<tr class="boxes">\n  <td class="box-name-label" id=${response.box_id} contenteditable="true">${box_name}</td><td><i class="ri-delete-bin-5-line text-danger box-remove"></i></td>\n</tr>`;
-                $tableID.find("table").append(newTr)
+                let newTr = `\n<tr class="boxes" onfocusout="change();">\n  <td class="box-name-label" id=${response.box_id} contenteditable="true">${box_name}</td><td><i class="ri-delete-bin-5-line text-danger box-remove"></i></td>\n</tr>`;
+                $tableID.find("table").find("tbody").append(newTr);
                 },
         error: function (response) {
             alert("Error");
@@ -47,9 +28,15 @@ $(".box-add").on("click", "i", () => {
 
 
 
-$tableID.on("click", ".box-remove", function() {
+function functionTest() {
+    console.log('this works');
+}
+
+
+$tableID.on("click", ".box-remove", function () {
     var box_id = $(this).parents("tr").find('.box-name-label').attr('id');
-    var tr = $(this).parents("tr")
+    var tr = $(this).parents("tr");
+    var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
 
     $.ajax({
         data: {
@@ -59,12 +46,12 @@ $tableID.on("click", ".box-remove", function() {
             type: "POST",
             url: "/crm/delete_box/",
 
-            success: function (data) {
-                 if (data.status === 'good') {
+            success: function (response) {
+                 if (response.response === 'good') {
                     tr.detach()
                  }
                  else {
-                    alert(data.status);
+                    alert(response.error);
                  }
             },
             error: function(){
@@ -78,6 +65,8 @@ $tableID.on("click", ".box-remove", function() {
 $('.boxes').on('blur', 'td[contenteditable]', function() {
     var box_name = $(this).parents("tr").find('.box-name-label').text()
     var box_id = $(this).attr('id');
+    var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
     $.ajax({
         data: {
             'box_id': box_id,
@@ -87,14 +76,17 @@ $('.boxes').on('blur', 'td[contenteditable]', function() {
         type: "POST",
         url: "/crm/update_box/",
 
-        success: function (data) {
-             if (data.result) {
-             console.log('Ok')
-             }
+        success: function (response) {
+            if (response.response) {
+                console.log('Ok')
+            }
+            else {
+                alert(response.error);
+            }
         },
         error: function(){
-            alert("failure");
-            }
+            alert("Error");
+        }
     })
 });
 
@@ -105,6 +97,7 @@ $('.boxes').on('blur', 'td[contenteditable]', function() {
 $(".packing-add").on("click", "i", () => {
 	var packing_name = $(".packing-add-input").val();
 	var packing_id = $(this).attr('id');
+	var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
 
 
     $.ajax({
@@ -116,9 +109,14 @@ $(".packing-add").on("click", "i", () => {
         url: "/crm/add_packing/",
 
         success: function (response) {
-            let newTr = `\n<tr class="packings">\n  <td class="packing-name-label" id=${response.packing_id} contenteditable="true">${packing_name}</td><td><i class="ri-delete-bin-5-line text-danger packing-remove"></i></td>\n</tr>`;
-            $tableID.find("table").append(newTr)
-            },
+            if (response.response === 'good') {
+                let newTr = `\n<tr class="packings">\n  <td class="packing-name-label" id=${response.packing_id} contenteditable="true">${packing_name}</td><td><i class="ri-delete-bin-5-line text-danger packing-remove"></i></td>\n</tr>`;
+                $tableID.find("table").append(newTr)
+            }
+            else {
+                alert(response.error);
+            }
+        },
         error: function (response) {
             alert("Error");
         }
@@ -130,6 +128,7 @@ $(".packing-add").on("click", "i", () => {
 $tableID.on("click", ".packing-remove", function() {
     var packing_id = $(this).parents("tr").find('.packing-name-label').attr('id');
     var tr = $(this).parents("tr");
+    var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
 
     $.ajax({
         data: {
@@ -140,7 +139,7 @@ $tableID.on("click", ".packing-remove", function() {
             url: "/crm/delete_packing/",
 
             success: function (response) {
-                 if (response.status == 'good') {
+                 if (response.response == 'good') {
                     tr.detach()
                  }
                  else {
@@ -158,6 +157,8 @@ $tableID.on("click", ".packing-remove", function() {
 $('.packings').on('blur', 'td[contenteditable]', function() {
     var packing_name = $(this).parents("tr").find('.packing-name-label').text()
     var packing_id = $(this).attr('id');
+    var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
     $.ajax({
         data: {
             'packing_id': packing_id,

@@ -1,5 +1,4 @@
 // CLONE BUCKET FORM
-
 $(document).ready(function () {
     var copies=1;
     $("#add").on("click", function () {
@@ -20,24 +19,6 @@ $(document).ready(function () {
 });
 
 
-// GET CSRF TOKEN
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-const csrftoken = getCookie('csrftoken');
-
-
 // GET ORDER
 
 $(document).ready(function () {
@@ -45,7 +26,7 @@ $(document).ready(function () {
 
         // Get orders fields
         var order = $('.order').find('.iq-card-body').find('.form-group').find('.form-control');
-        const orders_details = {};
+        var orders_details = {};
         order.each(function(){
             var order_field = $(this);
             var order_field_name = order_field.attr('name');
@@ -53,21 +34,27 @@ $(document).ready(function () {
         });
 
         // Ger orders checkboxes
-        var checkbox = $('.order').find('.iq-card-body').find('.checkbox').find('.check')
+        var checkbox = $('.order').find('.iq-card-body').find('.checkbox').find('.check');
         checkbox.each(function(){
             var checkbox_field = $(this).prop("checked");
             var checkbox_name = $(this).attr('name');
             orders_details[checkbox_name] = checkbox_field;
         });
 
-
         // Get orders buckets and save to array as dict
         var bucket = $( ".bucket" ).find('.iq-card-body');
-        const all_buckets = [];
+        var all_buckets = [];
+        var images_list = [];
+
+        var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+        var formData = new FormData();
+
         bucket.each(function(){
-            bucket_fields = $(this).find('.form-group').find('.form-control');
-            const bucket_values = {};
+            var bucket_fields = $(this).find('.form-group').find('.form-control');
+            var bucket_values = {};
             var colours_list = [];
+            var image = $(this).find('.form-group').find('.custom-file').find('.custom-file-input').prop('files')[0];
+            images_list.push(image);
             bucket_fields.each(function(){
                 var field = $(this);
                 var field_name = field.attr('name');
@@ -82,21 +69,32 @@ $(document).ready(function () {
             all_buckets.push(bucket_values);
         });
 
+        for (i = 0; i < images_list.length; i++) {
+                        formData.append('file' + i, images_list[i]);
+                    }
 
-        // Send request with order data
+        formData.append('order', JSON.stringify(orders_details));
+        formData.append('buckets', JSON.stringify(all_buckets));
+        formData.append('csrfmiddlewaretoken', csrftoken);
+
+
         $.ajax({
-            data: {
-                'order': JSON.stringify(orders_details),
-                'buckets': JSON.stringify(all_buckets),
-                'csrfmiddlewaretoken': csrftoken,
-            },
+//            data: {
+//                'order': JSON.stringify(orders_details),
+//                'buckets': JSON.stringify(all_buckets),
+//                'image': formData,
+//                'csrfmiddlewaretoken': token,
+//            },
+            data: formData,
             type: "POST",
             url: "/crm/save_order/",
+            cache: false,
+            processData: false,
+            contentType: false,
 
             success: function (response) {
                         alert ('All done ok');
                         location.href = "/crm/orders/"
-
                     },
 
             error: function (response) {
@@ -107,6 +105,32 @@ $(document).ready(function () {
     });
 })
 
+
+
+$(document).ready(function () {
+    $(".deleteorder").on("click", function () {
+        var order_number = $(this).attr("order_number");
+        var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+        var tr = $(this).parents("tr");
+
+        $.ajax({
+            data: {
+                'order_number': order_number,
+                'csrfmiddlewaretoken': csrftoken,
+                },
+            type: "POST",
+            url: "/crm/delete_order/",
+
+            success: function (response) {
+                    tr.detach()
+            },
+
+            error: function (response) {
+                alert("Error");
+            }
+        });
+    });
+    })
 
 
 // Validate number

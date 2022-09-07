@@ -78,6 +78,8 @@ class BucketsDetails(models.Model):
 	packing = models.CharField(max_length=100, blank=True, null=True)
 	rose_box = models.CharField(max_length=100, blank=True, null=True)
 	price = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000000)])
+	image = models.ImageField(upload_to='products/', null=True)
+
 
 	def __str__(self):
 		return f'id {self.id}'
@@ -102,7 +104,6 @@ class Order(models.Model):
 	first_order = models.BooleanField(default=False)
 	created_by = models.CharField(max_length=100, blank=True)
 	description = models.CharField(max_length=300, default='')
-	image = models.ImageField(upload_to='products/', null=True)
 
 	def order_save(self):
 		self.save()

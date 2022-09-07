@@ -15,7 +15,7 @@ def delete_order():
 	pass
 
 
-def save_new_order(order, buckets, user):
+def save_new_order(order, buckets, user, images):
 	number = order.get('number', 'None')
 	total_price = order.get('total_price', 'None')
 	name_surname = order.get('name_surname', 'None')
@@ -48,10 +48,11 @@ def save_new_order(order, buckets, user):
 		given_date=given_date,
 		payment=payment,
 		created_by=str(user),
-		description=description
+		description=description,
+
 	)
 
-	for bucket in buckets:
+	for bucket, image in zip(buckets, images):
 		bucket_colours = bucket.get('colours')
 		colours = ''
 		for colour in bucket_colours:
@@ -63,11 +64,12 @@ def save_new_order(order, buckets, user):
 			packing=bucket.get('packing'),
 			rose_box=bucket.get('rose_box'),
 			price=bucket.get('price'),
+			image=image,
 		)
 
 
 
-def update_order(order, order_model, buckets):
+def update_order(order, order_model, buckets, images):
 	client_id = order.get('client_id', None)
 	number = order.get('number', 'None')
 	total_price = order.get('total_price', 'None')
@@ -104,7 +106,7 @@ def update_order(order, order_model, buckets):
 	order_model.save()
 
 	buckets_model = BucketsDetails.objects.filter(order_id=order_model.id)
-	for bucket, bucket_model in zip(buckets, buckets_model):
+	for bucket, bucket_model, image in zip(buckets, buckets_model, images):
 		bucket_colours = bucket.get('colours')
 		rose_amount = bucket.get('rose_amount', 'None')
 		packing = bucket.get('packing', '')
@@ -119,6 +121,7 @@ def update_order(order, order_model, buckets):
 		bucket_model.packing = packing
 		bucket_model.rose_box = rose_box
 		bucket_model.price = price
+		bucket_model.image = image
 		bucket_model.save()
 
 

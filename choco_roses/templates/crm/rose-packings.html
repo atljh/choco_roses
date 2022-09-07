@@ -107,6 +107,7 @@
                                        </thead>
                                        <tbody>
                                        {% for packing in packings %}
+                                                   {% csrf_token %}
                                            <tr class="packings">
                                                <td contenteditable="true" id="{{ packing.id }}" class="packing-name-label">{{ packing.rose_packing }}</td>
                                                <td>

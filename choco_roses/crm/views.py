@@ -7,8 +7,7 @@ from crm.models import (
 	Order, RoseColour, RoseAmount, RoseBoxes, RosePacking, BucketsDetails, OrderStatus)
 from django.core.paginator import Paginator
 from crm.orders import save_new_order, update_order, delete_order, search_order
-
-
+from django.core.files import File
 
 def get_environ():
 	env = environ.Env()
@@ -99,23 +98,26 @@ def add_order(request):
 
 @staff_member_required
 def save_order(request):
+
 	order = json.loads(request.POST.get('order'))
 	buckets = json.loads(request.POST.get('buckets'))
 	user = request.user
+	images = [request.FILES.get(image) for image in request.FILES]
 
 	try:
 		order_model = Order.objects.get(number=order.get('number', 'None'))
-		update_order(order, order_model, buckets)
+		update_order(order, order_model, buckets, images)
 	except Order.DoesNotExist:
-		save_new_order(order, buckets, user)
+		save_new_order(order, buckets, user, images)
 
-	return render(request, 'crm/index.html')
+	return JsonResponse({'response': 'good'})
 
 
 @staff_member_required
-def delete_order(order_id):
+def delete_order(request):
+	order_number = request.POST.get('order_number')
 	try:
-		order = Order.objects.get(id=order_id)
+		order = Order.objects.get(number=order_number)
 		order.delete()
 	except Order.DoesNotExist as exc:
 		return JsonResponse({'error': exc}, status=500)
@@ -151,7 +153,7 @@ def add_box(request):
 	except Exception as exc:
 		return JsonResponse({'error': exc}, status=500)
 
-	return JsonResponse({'status': 'good', 'box_id': box.id})
+	return JsonResponse({'response': 'good', 'box_id': box.id})
 
 
 @staff_member_required
@@ -166,7 +168,7 @@ def delete_box(request):
 	except Exception as exc:
 		return JsonResponse({'error': f'{exc}'}, status=500)
 
-	return JsonResponse({'status': 'good'})
+	return JsonResponse({'response': 'good'})
 
 
 @staff_member_required
@@ -221,7 +223,7 @@ def delete_packing(request):
 	except Exception as exc:
 		return JsonResponse({'error': f'{exc}'}, status=500)
 
-	return JsonResponse({'status': 'good'}, status=200)
+	return JsonResponse({'response': 'good'}, status=200)
 
 
 @staff_member_required
@@ -233,8 +235,8 @@ def update_packing(request):
 		packing.rose_packing = packing_name
 		packing.save()
 	except Exception as exc:
-		return JsonResponse({'response': exc}, status=500)
-	return JsonResponse({'status': 'good'})
+		return JsonResponse({'error': exc}, status=500)
+	return JsonResponse({'response': 'good'})
 
 
 @staff_member_required

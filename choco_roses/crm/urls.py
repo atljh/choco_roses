@@ -12,7 +12,7 @@ urlpatterns = [
 	path('orders/search/', views.orders_req, name='search-order'),
 	path('order/<int:order_number>/', views.order_req, name='order'),
 	path('add_order/', views.add_order, name='add-order'),
-	path('delete_order/<int:order_number>/', views.delete_order, name='delete-order'),
+	path('delete_order/', views.delete_order, name='delete-order'),
 	path('save_order/', views.save_order, name='save-order'),
 	path('save_order/', views.save_order, name='save-order'),
 
