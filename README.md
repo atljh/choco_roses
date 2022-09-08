@@ -19,7 +19,12 @@ venv\Scripts\Activate.ps1
 
 $ source myvenv/bin/activate
 
-pip install requirements.txt
+
+git clone https://github.com/atljh/choco_roses
+
+pip install -r requirements.txt
+
+
 
 python manage.py makemigrations && ./manage.py  migrate
 
