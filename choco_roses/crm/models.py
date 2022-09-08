@@ -59,6 +59,7 @@ class Product(models.Model):
 
 class RoseBoxes(models.Model):
 	rose_box = models.CharField(max_length=100)
+	status = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.rose_box
@@ -66,6 +67,7 @@ class RoseBoxes(models.Model):
 
 class RosePacking(models.Model):
 	rose_packing = models.CharField(max_length=100)
+	status = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.rose_packing

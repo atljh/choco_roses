@@ -4,15 +4,10 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from crm.models import (
-	Order, RoseColour, RoseAmount, RoseBoxes, RosePacking, BucketsDetails, OrderStatus)
+	Order, RoseColour, RoseAmount, RoseBoxes, RosePacking, BucketsDetails, OrderStatus, OrderType)
 from django.core.paginator import Paginator
 from crm.orders import save_new_order, update_order, delete_order, search_order
 from django.core.files import File
-
-def get_environ():
-	env = environ.Env()
-	environ.Env.read_env()
-	return env
 
 
 @staff_member_required
@@ -32,7 +27,6 @@ def index(request):
 # region orders
 @staff_member_required
 def orders_req(request):
-
 	number = request.GET.get('search_order', None)
 	search_result = search_order(number)
 
@@ -52,22 +46,30 @@ def orders_req(request):
 
 @staff_member_required
 def order_req(request, order_number):
-	order = Order.objects.get(number=order_number)
-	buckets = BucketsDetails.objects.filter(order_id=order.id)
 	colours = RoseColour.objects.all()
 	rose_amount = RoseAmount.objects.all()
 	boxes = RoseBoxes.objects.all()
 	rose_packing = RosePacking.objects.all()
+	order_stats = OrderStatus.objects.all()
+	order_types = OrderType.objects.all()
+
+	order = Order.objects.get(number=order_number)
+	buckets = BucketsDetails.objects.filter(order_id=order.id)
 	bucket_colours = [bucket.colours.split() for bucket in buckets]
+
+
 
 	context = {
 		'colours': colours,
-		'rose_amount': rose_amount,
+		'rose_amounts': rose_amount,
 		'boxes': boxes,
-		'rose_packing': rose_packing,
+		'rose_packings': rose_packing,
+		'order_stats': order_stats,
+		'order_types': order_types,
+
 		'order': order,
 		'buckets': zip(buckets, bucket_colours),
-		'bucket_colours': bucket_colours
+		'bucket_colours': bucket_colours,
 	}
 
 	return render(request, 'crm/order.html', context=context)
@@ -79,6 +81,8 @@ def add_order(request):
 	rose_amount = RoseAmount.objects.all()
 	boxes = RoseBoxes.objects.all()
 	rose_packing = RosePacking.objects.all()
+	order_stats = OrderStatus.objects.all()
+	order_types = OrderType.objects.all()
 
 	try:
 		last_order_num = Order.objects.last().number + 1
@@ -87,10 +91,12 @@ def add_order(request):
 
 	context = {
 		'colours': colours,
-		'rose_amount': rose_amount,
+		'rose_amounts': rose_amount,
 		'boxes': boxes,
-		'rose_packing': rose_packing,
-		'last_order_num': last_order_num
+		'rose_packings': rose_packing,
+		'last_order_num': last_order_num,
+		'order_stats': order_stats,
+		'order_types': order_types,
 	}
 
 	return render(request, 'crm/add_order.html', context=context)
@@ -157,6 +163,25 @@ def add_box(request):
 
 
 @staff_member_required
+def status_box(request):
+	box_status = request.POST.get('box_status')
+	box_id = request.POST.get('box_id')
+	try:
+		box = RoseBoxes.objects.get(id=box_id)
+		box.status = box_status
+		box.save()
+	except RoseBoxes.DoesNotExist as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+	except TypeError as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+	except Exception as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+
+	return JsonResponse({'response': 'good'})
+
+
+
+@staff_member_required
 def delete_box(request):
 	box_id = request.POST.get('box_id')
 	try:
@@ -213,6 +238,25 @@ def add_packing(request):
 		return JsonResponse({'error': f'{exc}'}, status=500)
 
 	return JsonResponse({'response': 'good', 'packing_id': packing.id}, status=200)
+
+
+
+@staff_member_required
+def status_packing(request):
+	packing_status = request.POST.get('packing_status')
+	packing_id = request.POST.get('packing_id')
+	try:
+		packing = RosePacking.objects.get(id=packing_id)
+		packing.status = packing_status
+		packing.save()
+	except RosePacking.DoesNotExist as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+	except TypeError as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+	except Exception as exc:
+		return JsonResponse({'error': f'{exc}'}, status=500)
+
+	return JsonResponse({'response': 'good'})
 
 
 @staff_member_required

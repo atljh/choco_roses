@@ -237,24 +237,25 @@
                                   <div class="form-group">
                                       <label>Тип заказа:</label>
                                       <select class="form-control" id="order_type" name="order_type">
-                                          {% if order.order_type == 'Доставка' %}
-                                              <option selected>Доставка</option>
-                                              <option>Самовывоз</option>
-                                          {% else %}
-                                              <option selected>Самовывоз</option>
-                                              <option>Доставка</option>
-                                          {% endif %}
+                                          {% for order_type in order_types %}
+                                            {% if order_type.type == order.order_type %}
+                                                <option selected>{{ order_type.type }}</option>
+                                            {% else %}
+                                                <option >{{ order_type.type }}</option>
+                                            {% endif %}
+                                          {% endfor %}
                                       </select>
                                   </div>
                                   <div class="form-group">
                                       <label>Статус заказа:</label>
                                       <select class="form-control" id="order-status" name="order_status">
-                                          <option selected>{{ order.order_status }}</option>
-                                          <option>В процессе</option>
-                                          <option>Упакован</option>
-                                          <option>В пути</option>
-                                          <option>Доставлен</option>
-                                          <option>Отдан</option>
+                                          {% for order_status in order_stats %}
+                                            {% if order_status.status == order.order_status %}
+                                                <option selected>{{ order_status.status }}</option>
+                                            {% else %}
+                                                <option >{{ order_status.status }}</option>
+                                            {% endif %}
+                                          {% endfor %}
                                       </select>
                                   </div>
                                   <div class="form-group">
@@ -264,16 +265,16 @@
                                   </div>
                                   <div class="checkbox">
                                       {% if order.anonymous == True %}
-                                      <label><input class="mr-2 check" type="checkbox" name="anonymous" checked>Анонимно</label>
+                                        <label><input class="mr-2 check" type="checkbox" name="anonymous" checked>Анонимно</label>
                                       {% else %}
-                                      <label><input class="mr-2 check" type="checkbox" name="anonymous">Анонимно</label>
+                                        <label><input class="mr-2 check" type="checkbox" name="anonymous">Анонимно</label>
                                       {% endif %}
                                   </div>
                                   <div class="checkbox">
                                       {% if order.first_order == True %}
-                                      <label><input class="mr-2 check" type="checkbox" name="first_order" checked>Первый заказ</label>
+                                        <label><input class="mr-2 check" type="checkbox" name="first_order" checked>Первый заказ</label>
                                       {% else %}
-                                      <label><input class="mr-2 check" type="checkbox" name="first_order">Первый заказ</label>
+                                        <label><input class="mr-2 check" type="checkbox" name="first_order">Первый заказ</label>
                                       {% endif %}
                                   </div>
                                   <div class="form-group">
@@ -284,12 +285,6 @@
                                   <div class="mb-3 form-group">
                                       <label for="description" class="form-label">Описание</label>
                                       <textarea class="form-control" id="description" rows="3" name="description">{{ order.description }}</textarea>
-                                  </div>
-                                  <div class="form-group">
-                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="customFile">
-                                        <label class="custom-file-label" for="customFile">Choose file</label>
-                                     </div>
                                   </div>
                                   <button type="button" class="btn btn-primary" id="saveorder">Сохранить заказ</button>
                                   <button type="button" class="btn btn-primary" id="add">Добавить еще букет</button>
@@ -324,7 +319,7 @@
                                       <label>Выберите количество роз:</label>
                                       <select class="form-control" id="rose_amount" name="rose_amount">
                                           <option>{{ bucket.rose_amount }}</option>
-                                          {% for amount in rose_amount %}
+                                          {% for amount in rose_amounts %}
                                           <option>{{amount.rose_amount}}</option>
                                           {% endfor %}
                                       </select>
@@ -350,6 +345,12 @@
                                   <div class="form-group">
                                       <label for="price">Цена:</label>
                                       <input type="text" class="form-control" id="price" name="price" value="{{ bucket.price }}">
+                                  </div>
+                                  <div class="form-group">
+                                     <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="customFile">
+                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                     </div>
                                   </div>
                               </div>
                           </div>

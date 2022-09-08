@@ -136,7 +136,12 @@
                                            <tr class="packings">
                                                <td contenteditable="true" id="{{ packing.id }}" class="packing-name-label">{{ packing.rose_packing }}</td>
                                                <td>
-                                                    <i class="ri-delete-bin-5-line text-danger packing-remove"></i>
+                                                   {% if packing.status == True %}
+                                                   <i class="las la-check text-success packing-valid"></i>
+                                                   {% else %}
+                                                   <i class="las la-times text-danger packing-invalid"></i>
+                                                   {% endif %}
+                                                   <i class="las la-trash text-danger packing-remove"></i>
                                                </td>
                                            </tr>
                                        {% endfor %}

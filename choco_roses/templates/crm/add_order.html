@@ -262,18 +262,17 @@
                             <div class="form-group">
                                 <label>Тип заказа:</label>
                                 <select class="form-control" id="order_type" name="order_type">
-                                    <option selected>Доставка</option>
-                                    <option>Самовывоз</option>
+                                    {% for order_type in order_types %}
+                                        <option>{{ order_type.type }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Статус заказа:</label>
                                 <select class="form-control" id="order-status" name="order_status">
-                                    <option selected>Нужно сделать</option>
-                                    <option >В процессе</option>
-                                    <option>Упакован</option>
-                                    <option>В пути</option>
-                                    <option>Отдан</option>
+                                    {% for order_status in order_stats%}
+                                        <option >{{ order_status.status }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="form-group">
@@ -327,7 +326,7 @@
                                 <div class="form-group">
                                     <label>Выберите количество роз:</label>
                                     <select class="form-control" id="rose_amount" name="rose_amount">
-                                        {% for amount in rose_amount %}
+                                        {% for amount in rose_amounts %}
                                         <option>{{amount.rose_amount}}</option>
                                         {% endfor %}
                                     </select>

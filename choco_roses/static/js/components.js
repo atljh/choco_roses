@@ -29,6 +29,74 @@ $(".box-add").on("click", "i", () => {
 
 
 
+$tableID.on("click", ".box-invalid", function () {
+    var box_id = $(this).parents("tr").find('.box-name-label').attr('id');
+    var td = $(this).parents("td");
+    var tr = $(this).parents("tr");
+    var button = td.find(".box-invalid");
+    let newTd = '<td><i class="las la-check text-success box-valid"></i><i class="las la-trash text-danger box-remove"></i></td>'
+    var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
+    $.ajax({
+        data: {
+            'box_id': box_id,
+            'box_status': 'True',
+            'csrfmiddlewaretoken': csrftoken,
+            },
+            type: "POST",
+            url: "/crm/box_status/",
+
+            success: function (response) {
+                 if (response.response === 'good') {
+                    td.detach()
+                    tr.append(newTd)
+                 }
+                 else {
+                    alert(response.error);
+                 }
+            },
+            error: function(){
+                alert("Error");
+        }
+        });
+
+    });
+
+
+$tableID.on("click", ".box-valid", function () {
+    var box_id = $(this).parents("tr").find('.box-name-label').attr('id');
+    var td = $(this).parents("td");
+    var tr = $(this).parents("tr");
+    var button = tr.find(".box-valid");
+    let newTr = '<td><i class="las la-times text-danger box-invalid"></i><i class="las la-trash text-danger box-remove"></i></td>'
+    var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
+    $.ajax({
+        data: {
+            'box_id': box_id,
+            'box_status': 'False',
+            'csrfmiddlewaretoken': csrftoken,
+            },
+            type: "POST",
+            url: "/crm/box_status/",
+
+            success: function (response) {
+                 if (response.response === 'good') {
+                    td.detach()
+                    tr.append(newTr)
+                 }
+                 else {
+                    alert(response.error);
+                 }
+            },
+            error: function(){
+                alert("Error");
+        }
+        });
+
+    });
+
+
 $tableID.on("click", ".box-remove", function () {
     var box_id = $(this).parents("tr").find('.box-name-label').attr('id');
     var tr = $(this).parents("tr");
@@ -118,6 +186,76 @@ $(".packing-add").on("click", "i", () => {
         }
     });
 });
+
+
+
+
+$tableID.on("click", ".packing-invalid", function () {
+    var packing_id = $(this).parents("tr").find('.packing-name-label').attr('id');
+    var td = $(this).parents("td");
+    var tr = $(this).parents("tr");
+    var button = td.find(".packing-invalid");
+    let newTd = '<td><i class="las la-check text-success packing-valid"></i><i class="las la-trash text-danger packing-remove"></i></td>'
+    var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
+    $.ajax({
+        data: {
+            'packing_id': packing_id,
+            'packing_status': 'True',
+            'csrfmiddlewaretoken': csrftoken,
+            },
+            type: "POST",
+            url: "/crm/packing_status/",
+
+            success: function (response) {
+                 if (response.response === 'good') {
+                    td.detach()
+                    tr.append(newTd)
+                 }
+                 else {
+                    alert(response.error);
+                 }
+            },
+            error: function(){
+                alert("Error");
+        }
+        });
+
+    });
+
+
+$tableID.on("click", ".packing-valid", function () {
+    var packing_id = $(this).parents("tr").find('.packing-name-label').attr('id');
+    var td = $(this).parents("td");
+    var tr = $(this).parents("tr");
+    var button = tr.find(".packing-valid");
+    let newTr = '<td><i class="las la-times text-danger packing-invalid"></i><i class="las la-trash text-danger packing-remove"></i></td>'
+    var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
+    $.ajax({
+        data: {
+            'packing_id': packing_id,
+            'packing_status': 'False',
+            'csrfmiddlewaretoken': csrftoken,
+            },
+            type: "POST",
+            url: "/crm/packing_status/",
+
+            success: function (response) {
+                 if (response.response === 'good') {
+                    td.detach()
+                    tr.append(newTr)
+                 }
+                 else {
+                    alert(response.error);
+                 }
+            },
+            error: function(){
+                alert("Error");
+        }
+        });
+
+    });
 
 
 

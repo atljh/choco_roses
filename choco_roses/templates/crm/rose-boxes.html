@@ -137,15 +137,17 @@
                                                     });
                                             }
                                         </script>
-
                                         {% csrf_token %}
                                        {% for box in boxes %}
-
-
                                            <tr class="boxes">
                                                <td contenteditable="true" id="{{ box.id }}" class="box-name-label">{{ box.rose_box }}</td>
                                                <td>
-                                                    <i class="ri-delete-bin-5-line text-danger box-remove"></i>
+                                                   {% if box.status == True %}
+                                                   <i class="las la-check text-success box-valid"></i>
+                                                   {% else %}
+                                                   <i class="las la-times text-danger box-invalid"></i>
+                                                   {% endif %}
+                                                   <i class="las la-trash text-danger box-remove"></i>
                                                </td>
                                            </tr>
                                        {% endfor %}
