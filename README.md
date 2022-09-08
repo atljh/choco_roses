@@ -3,7 +3,25 @@
 
 How to run:
 
-./manage.py makemigrations && ./manage.py  migrate
+$ python -m venv venv
 
-./manage.py runserver
+
+# In cmd.exe
+
+venv\Scripts\activate.bat
+
+
+# In PowerShell
+venv\Scripts\Activate.ps1
+
+
+# Linux and MacOS venv activation
+
+$ source myvenv/bin/activate
+
+pip install requirements.txt
+
+python manage.py makemigrations && ./manage.py  migrate
+
+python manage.py runserver
 
