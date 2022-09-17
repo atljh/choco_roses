@@ -302,13 +302,13 @@
                               </div>
                               <div class="iq-card-body" id="col">
                                   <div class="form-group colour_table" id="colour_table">
+                                      <label>Выберите цвет:</label>
                                       {% for col in bucket_colours %}
                                       <div class="form-group" id="colour">
-                                          <label>Выберите цвет:</label>
                                           <select class="form-control" id="colours" name="colours">
-                                              <option selected>{{ col }}</option>
+                                              <option selected>{{col}}</option>
                                               {% for colour in colours %}
-                                                <option>{{colour.colour}}</option>
+                                                    <option>{{colour.colour}}</option>
                                               {% endfor %}
                                           </select>
                                       </div>
@@ -318,27 +318,38 @@
                                   <div class="form-group">
                                       <label>Выберите количество роз:</label>
                                       <select class="form-control" id="rose_amount" name="rose_amount">
-                                          <option>{{ bucket.rose_amount }}</option>
                                           {% for amount in rose_amounts %}
-                                          <option>{{amount.rose_amount}}</option>
+                                            {% if amount == bucket.rose_amount %}
+                                                <option>{{amount.rose_amount}}</option>
+                                            {% else %}
+                                                <option selected>{{amount.rose_amount}}</option>
+                                            {% endif %}
                                           {% endfor %}
                                       </select>
                                   </div>
                                   <div class="form-group">
                                       <label>Выберите упаковку:</label>
                                       <select class="form-control" id="packing" name="packing">
-                                          <option selected>{% if bucket.packing != None %}{{ bucket.packing }}{% endif %}</option>
-                                          {% for pack in rose_packing %}
-                                          <option>{{pack.rose_packing}}</option>
+                                          <option></option>
+                                          {% for pack in rose_packings %}
+                                            x`{% if pack == bucket.rose_packing %}
+                                                <option selected>{{pack.packing}}</option>
+                                            {% else %}
+                                                <option>{{pack.packing}}</option>
+                                            {% endif %}
                                           {% endfor %}
                                       </select>
                                   </div>
                                   <div class="form-group">
                                       <label>Выберите коробку:</label>
                                       <select class="form-control" id="rose_box" name="rose_box">
-                                          <option selected>{% if bucket.rose_box != None %}{{ bucket.rose_box }}{% endif %}</option>
+                                          <option></option>
                                           {% for box in boxes %}
-                                          <option>{{box.rose_box}}</option>
+                                            {% if box.box == bucket.rose_box %}
+                                                <option selected>{{box.box}}</option>
+                                            {% else %}
+                                                <option>{{box.box}}</option>
+                                            {% endif %}
                                           {% endfor %}
                                       </select>
                                   </div>
@@ -352,6 +363,7 @@
                                         <label class="custom-file-label" for="customFile">Choose file</label>
                                      </div>
                                   </div>
+                                  <img src="/media/{{bucket.image}}" class="img-fluid" alt="Responsive image">
                               </div>
                           </div>
                       </div>

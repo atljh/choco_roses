@@ -1,7 +1,5 @@
-from django.contrib import admin
-from django.urls import path
 from . import views
-from django.urls import path, include
+from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from . import validators
@@ -9,7 +7,7 @@ from . import validators
 urlpatterns = [
 	path('', views.index, name='index'),
 	path('orders/', views.orders_req, name='orders'),
-	path('orders/search/', views.orders_req, name='search-order'),
+	path('orders/search/', views.search_order_req, name='search-order'),
 	path('order/<int:order_number>/', views.order_req, name='order'),
 	path('add_order/', views.add_order, name='add-order'),
 	path('delete_order/', views.delete_order, name='delete-order'),
@@ -48,5 +46,8 @@ urlpatterns = [
 	path('validate_total_price/', validators.validate_total_price, name='validate-total_price'),
 	path('validate_price/', validators.validate_price, name='validate-price'),
 ]
+
+
 if settings.DEBUG:
 	urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

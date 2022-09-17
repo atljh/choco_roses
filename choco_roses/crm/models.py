@@ -58,19 +58,19 @@ class Product(models.Model):
 
 
 class RoseBoxes(models.Model):
-	rose_box = models.CharField(max_length=100)
+	box = models.CharField(max_length=100)
 	status = models.BooleanField(default=False)
 
 	def __str__(self):
-		return self.rose_box
+		return self.box
 
 
 class RosePacking(models.Model):
-	rose_packing = models.CharField(max_length=100)
+	packing = models.CharField(max_length=100)
 	status = models.BooleanField(default=False)
 
 	def __str__(self):
-		return self.rose_packing
+		return self.packing
 
 
 class BucketsDetails(models.Model):
@@ -88,7 +88,7 @@ class BucketsDetails(models.Model):
 
 
 class Order(models.Model):
-	client_id = models.IntegerField(null=True)
+	client_id = models.IntegerField(null=True, blank=True)
 	number = models.IntegerField(null=True)
 	total_price = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000000)])
 	name_surname = models.CharField(max_length=50, default='', blank=True)
@@ -106,6 +106,10 @@ class Order(models.Model):
 	first_order = models.BooleanField(default=False)
 	created_by = models.CharField(max_length=100, blank=True)
 	description = models.CharField(max_length=300, default='')
+
+
+	class Mera:
+		ordering = ['-number']
 
 	def order_save(self):
 		self.save()

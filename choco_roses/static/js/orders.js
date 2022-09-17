@@ -105,7 +105,7 @@ $(document).ready(function () {
     });
 })
 
-
+// Delete order
 
 $(document).ready(function () {
     $(".deleteorder").on("click", function () {
@@ -132,6 +132,27 @@ $(document).ready(function () {
     });
     })
 
+
+
+// Search order
+
+//$(document).ready(function () {
+//    $(".search_order").on("click", function () {
+//        var search_value = $( ".search-form" ).find(".form-group").find(".search-order").val();
+//        var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+//        console.log(search_value);
+//
+//        $.ajax({
+//            url: '/crm/orders/search/',
+//            data: {'search_value': search_value},
+//            dataType: 'json',
+//            type: 'GET',
+//            success: function (response) {
+//                console.log(response);}
+//            })
+//
+//    })
+//});
 
 // Validate number
 

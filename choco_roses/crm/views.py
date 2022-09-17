@@ -7,7 +7,11 @@ from crm.models import (
 	Order, RoseColour, RoseAmount, RoseBoxes, RosePacking, BucketsDetails, OrderStatus, OrderType)
 from django.core.paginator import Paginator
 from crm.orders import save_new_order, update_order, delete_order, search_order
-from django.core.files import File
+from django.shortcuts import get_object_or_404
+
+
+def is_ajax(request):
+	return request.headers.get('x-requested-with') == 'XMLHttpRequest'
 
 
 @staff_member_required
@@ -27,21 +31,48 @@ def index(request):
 # region orders
 @staff_member_required
 def orders_req(request):
-	number = request.GET.get('search_order', None)
-	search_result = search_order(number)
+	search_value = request.GET.get('search_order', None)
+	search_status = request.GET.get('search_status', None)
 
-	orders = Order.objects.all()
+
+	if search_value and search_status != 'Все':
+		orders = search_order(search_value, search_status)
+		print('and', orders)
+	elif search_value and search_status == 'Все':
+		orders = search_order(search_value, search_status)
+		print('a', orders)
+	elif search_status and search_status != 'Все':
+		orders = Order.objects.filter(order_status=search_status)
+		print('sta', orders)
+	else:
+		orders = Order.objects.all().order_by('-number')
+
+
 	paginator = Paginator(orders, 10)
 	page_number = request.GET.get('page', 1)
 	page_obj = paginator.get_page(page_number)
 	page_obj.adjusted_elided_pages = paginator.get_elided_page_range(page_number)
+	order_stats = OrderStatus.objects.all()
 
 	context = {
+		'search_status': search_status,
+		'search_value': search_value,
 		'page_obj': page_obj,
-		'search_order': search_result,
+		'order_stats': order_stats,
 	}
 
 	return render(request, 'crm/orders.html', context=context)
+
+
+@staff_member_required
+def search_order_req(request):
+	if is_ajax(request):
+		if request.method == 'GET':
+			search_value = request.GET.get('search_value', None)
+			search_result = search_order(search_value)
+			if search_result:
+				return JsonResponse({'orders': f'{search_result}'})
+	return JsonResponse({'response': 'success'})
 
 
 @staff_member_required
@@ -52,12 +83,11 @@ def order_req(request, order_number):
 	rose_packing = RosePacking.objects.all()
 	order_stats = OrderStatus.objects.all()
 	order_types = OrderType.objects.all()
-
-	order = Order.objects.get(number=order_number)
+	order = get_object_or_404(Order, number=order_number)
 	buckets = BucketsDetails.objects.filter(order_id=order.id)
 	bucket_colours = [bucket.colours.split() for bucket in buckets]
-
-
+	print(order.id)
+	print(buckets)
 
 	context = {
 		'colours': colours,
@@ -104,7 +134,6 @@ def add_order(request):
 
 @staff_member_required
 def save_order(request):
-
 	order = json.loads(request.POST.get('order'))
 	buckets = json.loads(request.POST.get('buckets'))
 	user = request.user
@@ -180,7 +209,6 @@ def status_box(request):
 	return JsonResponse({'response': 'good'})
 
 
-
 @staff_member_required
 def delete_box(request):
 	box_id = request.POST.get('box_id')
@@ -213,6 +241,7 @@ def update_box(request):
 
 	return JsonResponse({'response': 'good'})
 
+
 # endregion
 
 
@@ -238,7 +267,6 @@ def add_packing(request):
 		return JsonResponse({'error': f'{exc}'}, status=500)
 
 	return JsonResponse({'response': 'good', 'packing_id': packing.id}, status=200)
-
 
 
 @staff_member_required
