@@ -2,7 +2,7 @@
 $(document).ready(function () {
     var copies=1;
     $("#add").on("click", function () {
-        var clone = $( "#bucket" )
+        var clone = $( ".bucket" )
         .clone(true, true).attr('id','bucket_'+(copies++)).appendTo(".order-body");
     });
 });
@@ -24,7 +24,6 @@ $(document).ready(function () {
 $(document).ready(function () {
     $("#saveorder").on("click", function () {
 
-        // Get orders fields
         var order = $('.order').find('.iq-card-body').find('.form-group').find('.form-control');
         var orders_details = {};
         order.each(function(){
@@ -33,7 +32,6 @@ $(document).ready(function () {
             orders_details[order_field_name] = order_field.val();
         });
 
-        // Ger orders checkboxes
         var checkbox = $('.order').find('.iq-card-body').find('.checkbox').find('.check');
         checkbox.each(function(){
             var checkbox_field = $(this).prop("checked");
@@ -41,7 +39,6 @@ $(document).ready(function () {
             orders_details[checkbox_name] = checkbox_field;
         });
 
-        // Get orders buckets and save to array as dict
         var bucket = $( ".bucket" ).find('.iq-card-body');
         var all_buckets = [];
         var images_list = [];
@@ -49,12 +46,15 @@ $(document).ready(function () {
         var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
         var formData = new FormData();
 
+        var bucket_id = 0;
         bucket.each(function(){
+            bucket_id++;
             var bucket_fields = $(this).find('.form-group').find('.form-control');
             var bucket_values = {};
+            bucket_values['id'] = bucket_id;
             var colours_list = [];
             var image = $(this).find('.form-group').find('.custom-file').find('.custom-file-input').prop('files')[0];
-            images_list.push(image);
+            formData.append(`${bucket_id}`, image);
             bucket_fields.each(function(){
                 var field = $(this);
                 var field_name = field.attr('name');
@@ -69,21 +69,20 @@ $(document).ready(function () {
             all_buckets.push(bucket_values);
         });
 
-        for (i = 0; i < images_list.length; i++) {
-                        formData.append('file' + i, images_list[i]);
-                    }
-
+//        for (i = 0; i < images_list.length; i++) {
+//                        formData.append('file' + i, images_list[i]);
+//                    }
+//
         formData.append('order', JSON.stringify(orders_details));
         formData.append('buckets', JSON.stringify(all_buckets));
         formData.append('csrfmiddlewaretoken', csrftoken);
-
 
         $.ajax({
 //            data: {
 //                'order': JSON.stringify(orders_details),
 //                'buckets': JSON.stringify(all_buckets),
-//                'image': formData,
-//                'csrfmiddlewaretoken': token,
+//                'image': formData.append('images', JSON.stringify(images_list)),
+//                'csrfmiddlewaretoken': formData.append('csrfmiddlewaretoken', csrftoken);,
 //            },
             data: formData,
             type: "POST",
@@ -94,7 +93,7 @@ $(document).ready(function () {
 
             success: function (response) {
                         alert ('All done ok');
-                        location.href = "/crm/orders/"
+//                        location.href = "/crm/orders/"
                     },
 
             error: function (response) {
@@ -133,26 +132,20 @@ $(document).ready(function () {
     })
 
 
+$(document).ready(()=>{
+      $('.custom-file-input').change(function(){
+        const file = this.files[0];
+        var image = $(this).parent('.custom-file').find('.output_image');
+        if (file){
+          let reader = new FileReader();
+          reader.onload = function(event){
+            image.attr('src', event.target.result);
+          }
+          reader.readAsDataURL(file);
+        }
+      });
+    });
 
-// Search order
-
-//$(document).ready(function () {
-//    $(".search_order").on("click", function () {
-//        var search_value = $( ".search-form" ).find(".form-group").find(".search-order").val();
-//        var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
-//        console.log(search_value);
-//
-//        $.ajax({
-//            url: '/crm/orders/search/',
-//            data: {'search_value': search_value},
-//            dataType: 'json',
-//            type: 'GET',
-//            success: function (response) {
-//                console.log(response);}
-//            })
-//
-//    })
-//});
 
 // Validate number
 

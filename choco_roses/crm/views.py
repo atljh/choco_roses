@@ -37,13 +37,10 @@ def orders_req(request):
 
 	if search_value and search_status != 'Все':
 		orders = search_order(search_value, search_status)
-		print('and', orders)
 	elif search_value and search_status == 'Все':
 		orders = search_order(search_value, search_status)
-		print('a', orders)
 	elif search_status and search_status != 'Все':
 		orders = Order.objects.filter(order_status=search_status)
-		print('sta', orders)
 	else:
 		orders = Order.objects.all().order_by('-number')
 
@@ -65,17 +62,6 @@ def orders_req(request):
 
 
 @staff_member_required
-def search_order_req(request):
-	if is_ajax(request):
-		if request.method == 'GET':
-			search_value = request.GET.get('search_value', None)
-			search_result = search_order(search_value)
-			if search_result:
-				return JsonResponse({'orders': f'{search_result}'})
-	return JsonResponse({'response': 'success'})
-
-
-@staff_member_required
 def order_req(request, order_number):
 	colours = RoseColour.objects.all()
 	rose_amount = RoseAmount.objects.all()
@@ -86,8 +72,6 @@ def order_req(request, order_number):
 	order = get_object_or_404(Order, number=order_number)
 	buckets = BucketsDetails.objects.filter(order_id=order.id)
 	bucket_colours = [bucket.colours.split() for bucket in buckets]
-	print(order.id)
-	print(buckets)
 
 	context = {
 		'colours': colours,
@@ -136,14 +120,15 @@ def add_order(request):
 def save_order(request):
 	order = json.loads(request.POST.get('order'))
 	buckets = json.loads(request.POST.get('buckets'))
+	print(request.FILES)
 	user = request.user
 	images = [request.FILES.get(image) for image in request.FILES]
 
-	try:
-		order_model = Order.objects.get(number=order.get('number', 'None'))
-		update_order(order, order_model, buckets, images)
-	except Order.DoesNotExist:
-		save_new_order(order, buckets, user, images)
+	# try:
+	# 	order_model = Order.objects.get(number=order.get('number', 'None'))
+	# 	update_order(order, order_model, buckets, images)
+	# except Order.DoesNotExist:
+	# 	save_new_order(order, buckets, user, images)
 
 	return JsonResponse({'response': 'good'})
 

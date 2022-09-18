@@ -75,7 +75,6 @@ def save_new_order(order, buckets, user, images):
 				continue
 			bucket_values[field] = bucket.get(f'{field}', '')
 		bucket = BucketsDetails.objects.create(**bucket_values)
-		print('b', bucket.id)
 
 	# for bucket, image in zip(buckets, images):
 	# 	bucket_colours = bucket.get('colours')

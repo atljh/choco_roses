@@ -7,7 +7,6 @@ from . import validators
 urlpatterns = [
 	path('', views.index, name='index'),
 	path('orders/', views.orders_req, name='orders'),
-	path('orders/search/', views.search_order_req, name='search-order'),
 	path('order/<int:order_number>/', views.order_req, name='order'),
 	path('add_order/', views.add_order, name='add-order'),
 	path('delete_order/', views.delete_order, name='delete-order'),
