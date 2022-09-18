@@ -21,40 +21,26 @@ class Client(models.Model):
 		return reverse('crm:detail-client', kwargs={'pk': self.pk})
 
 
-class RoseColour(models.Model):
-	colour = models.CharField(max_length=50)
-
-	def __str__(self):
-		return self.colour
-
-
-class RoseAmount(models.Model):
-	rose_amount = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(1000)])
-
-	def __str__(self):
-		return str(self.rose_amount)
-
-
-class Product(models.Model):
-	name = models.CharField(max_length=60)
-	price = models.IntegerField(default=0)
-	color = models.ForeignKey(RoseColour, on_delete=models.CASCADE, default=1)
-	rose_amount = models.ForeignKey(RoseAmount, on_delete=models.CASCADE, default=1)
-	description = models.CharField(
-		max_length=250, default='', blank=True, null=True)
-	image = models.ImageField(upload_to='products/')
-	date_created = models.DateTimeField(auto_now_add=True)
-
-	@staticmethod
-	def get_products_by_id(ids):
-		return Product.objects.filter(id__in=ids)
-
-	@staticmethod
-	def get_all_products():
-		return Product.objects.all()
-
-	def __str__(self):
-		return self.name
+# class Product(models.Model):
+# 	name = models.CharField(max_length=60)
+# 	price = models.IntegerField(default=0)
+# 	color = models.ForeignCKey(RoseColour, on_delete=models.CASCADE, default=1)
+# 	rose_amount = models.ForeignKey(RoseAmount, on_delete=models.CASCADE, default=1)
+# 	description = models.CharField(
+# 		max_length=250, default='', blank=True, null=True)
+# 	image = models.ImageField(upload_to='products/')
+# 	date_created = models.DateTimeField(auto_now_add=True)
+#
+# 	@staticmethod
+# 	def get_products_by_id(ids):
+# 		return Product.objects.filter(id__in=ids)
+#
+# 	@staticmethod
+# 	def get_all_products():
+# 		return Product.objects.all()
+#
+# 	def __str__(self):
+# 		return self.name
 
 
 class RoseBoxes(models.Model):
@@ -71,6 +57,21 @@ class RosePacking(models.Model):
 
 	def __str__(self):
 		return self.packing
+
+
+class RoseColour(models.Model):
+	colour = models.CharField(max_length=50)
+	status = models.BooleanField(default=False)
+
+	def __str__(self):
+		return str(self.colour)
+
+
+class RoseAmount(models.Model):
+	rose_amount = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(1000)])
+
+	def __str__(self):
+		return str(self.rose_amount)
 
 
 class BucketsDetails(models.Model):

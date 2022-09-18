@@ -28,6 +28,20 @@ def save_new_order(order, buckets, user, images):
 		order_values[field] = order.get(f'{field}', '')
 	new_order_model = Order.objects.create(**order_values)
 
+
+	for bucket in buckets:
+		bucket_values = {'order_id': new_order_model.id}
+		for field in bucket:
+			if field == 'colours':
+				bucket_colours = bucket.get('colours')
+				colours = ''
+				for colour in bucket_colours:
+					colours += f'{colour} '
+				bucket_values['colours'] = colours
+				continue
+			bucket_values[field] = bucket.get(f'{field}', '')
+		BucketsDetails.objects.create(**bucket_values)
+
 	# number = order.get('number', 'None')
 	# total_price = order.get('total_price', 'None')
 	# name_surname = order.get('name_surname', 'None')
@@ -63,18 +77,7 @@ def save_new_order(order, buckets, user, images):
 	# 	description=description,
 	#
 	# )
-	for bucket in buckets:
-		bucket_values = {'order_id': new_order_model.id}
-		for field in bucket:
-			if field == 'colours':
-				bucket_colours = bucket.get('colours')
-				colours = ''
-				for colour in bucket_colours:
-					colours += f'{colour} '
-				bucket_values['colours'] = colours
-				continue
-			bucket_values[field] = bucket.get(f'{field}', '')
-		bucket = BucketsDetails.objects.create(**bucket_values)
+
 
 	# for bucket, image in zip(buckets, images):
 	# 	bucket_colours = bucket.get('colours')
@@ -119,12 +122,19 @@ def update_order(order, order_model, buckets, images):
 
 
 def search_order(search_value, search_status):
-	order_date = search_date(search_value, search_status)
-	order_number = search_number(search_value, search_status)
-	if len(list(chain(order_date, order_number))) == 0:
-		return []
-	return list(chain(order_date, order_number))
-
+	if search_value and search_status != 'Все' or search_value and search_status == 'Все':
+		order_date = search_date(search_value, search_status)
+		order_number = search_number(search_value, search_status)
+		# if len(list(chain(order_date, order_number))) == 0:
+		# 	return []
+		orders = list(chain(order_date, order_number))
+		return orders
+	elif search_status and search_status != 'Все':
+		orders = Order.objects.filter(order_status=search_status)
+		return orders
+	else:
+		orders = Order.objects.all().order_by('-number')
+		return orders
 
 
 def search_date(number, search_status):

@@ -138,19 +138,19 @@
                                             }
                                         </script>
                                         {% csrf_token %}
-                                       {% for box in boxes %}
+                                        {% for box in boxes %}
                                            <tr class="boxes">
-                                               <td contenteditable="true" id="{{ box.id }}" class="box-name-label">{{ box.rose_box }}</td>
+                                               <td contenteditable="true" id="{{ box.id }}" class="box-name-label">{{ box.box }}</td>
                                                <td>
-                                                   {% if box.status == True %}
-                                                   <i class="las la-check text-success box-valid"></i>
-                                                   {% else %}
+                                                   {% if box.status == False %}
                                                    <i class="las la-times text-danger box-invalid"></i>
+                                                   {% else %}
+                                                   <i class="las la-check text-success box-valid"></i>
                                                    {% endif %}
                                                    <i class="las la-trash text-danger box-remove"></i>
                                                </td>
                                            </tr>
-                                       {% endfor %}
+                                        {% endfor %}
                                        </tbody>
                                    </table>
                                </div>

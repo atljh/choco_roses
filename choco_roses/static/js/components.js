@@ -17,7 +17,7 @@ $(".box-add").on("click", "i", () => {
 
         success: function (response) {
                 console.log(response.box_id)
-                let newTr = `\n<tr class="boxes" onfocusout="change()">\n  <td class="box-name-label" id=${response.box_id} contenteditable="true">${box_name}</td><td><i class="ri-delete-bin-5-line text-danger box-remove"></i></td>\n</tr>`;
+                let newTr = `\n<tr class="boxes" onfocusout="change()">\n  <td class="box-name-label" id=${response.box_id} contenteditable="true">${box_name}</td><td><i class="las la-check text-success box-valid"></i>&nbsp;<i class="las la-trash text-danger box-remove"></i></td>\n</tr>`;
                 $tableID.find("table").find("tbody").append(newTr);
                 },
         error: function (response) {
@@ -34,7 +34,7 @@ $tableID.on("click", ".box-invalid", function () {
     var td = $(this).parents("td");
     var tr = $(this).parents("tr");
     var button = td.find(".box-invalid");
-    let newTd = '<td><i class="las la-check text-success box-valid"></i><i class="las la-trash text-danger box-remove"></i></td>'
+    let newTd = '<td><i class="las la-check text-success box-valid"></i>&nbsp;<i class="las la-trash text-danger box-remove"></i></td>'
     var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
 
     $.ajax({
@@ -68,7 +68,7 @@ $tableID.on("click", ".box-valid", function () {
     var td = $(this).parents("td");
     var tr = $(this).parents("tr");
     var button = tr.find(".box-valid");
-    let newTr = '<td><i class="las la-times text-danger box-invalid"></i><i class="las la-trash text-danger box-remove"></i></td>'
+    let newTr = '<td><i class="las la-times text-danger box-invalid"></i>&nbsp;<i class="las la-trash text-danger box-remove"></i></td>'
     var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
 
     $.ajax({
@@ -174,7 +174,7 @@ $(".packing-add").on("click", "i", () => {
 
         success: function (response) {
             if (response.response === 'good') {
-                let newTr = `\n<tr class="packings" onfocusout="change()">\n  <td class="packing-name-label" id=${response.packing_id} contenteditable="true">${packing_name}</td><td><i class="ri-delete-bin-5-line text-danger packing-remove"></i></td>\n</tr>`;
+                let newTr = `\n<tr class="packings" onfocusout="change()">\n  <td class="packing-name-label" id=${response.packing_id} contenteditable="true">${packing_name}</td><td><i class="las la-check text-success packing-valid"></i>&nbsp;<i class="las la-trash text-danger packing-remove"></i></td>\n</tr>`;
                 $tableID.find("table").find("tbody").append(newTr)
             }
             else {
@@ -306,6 +306,159 @@ $('.packings').on('blur', 'td[contenteditable]', function() {
             },
         error: function(response){
             alert("failure");
+            }
+    })
+});
+
+
+$(".colour-add").on("click", "i", () => {
+	var colour = $(".colour-add-input").val();
+	var colour_id = $(this).attr('id');
+	var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
+
+    $.ajax({
+        data: {
+            'colour': colour,
+            'csrfmiddlewaretoken': csrftoken,
+        },
+        type: "POST",
+        url: "/crm/add_colour/",
+
+        success: function (response) {
+            if (response.response === 'good') {
+                let newTr = `\n<tr class="colours" onfocusout="change()">\n  <td class="colour-name-label" id=${response.colour_id} contenteditable="true">${colour}</td><td><i class="las la-check text-success colour-valid"></i>&nbsp;<i class="las la-trash text-danger colour-remove"></i></td>\n</tr>`;
+                $tableID.find("table").find("tbody").append(newTr)
+            }
+            else {
+                alert(response.error);
+            }
+        },
+        error: function (response) {
+            alert("Error");
+        }
+    });
+});
+
+
+
+
+$tableID.on("click", ".colour-invalid", function () {
+    var colour_id = $(this).parents("tr").find('.colour-name-label').attr('id');
+    var td = $(this).parents("td");
+    var tr = $(this).parents("tr");
+    var button = td.find(".colour-invalid");
+    let newTd = '<td><i class="las la-check text-success colour-valid"></i><i class="las la-trash text-danger colour-remove"></i></td>'
+    var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
+    $.ajax({
+        data: {
+            'colour_id': colour_id,
+            'colour_status': 'True',
+            'csrfmiddlewaretoken': csrftoken,
+            },
+            type: "POST",
+            url: "/crm/colour_status/",
+
+            success: function (response) {
+                 if (response.response === 'good') {
+                    td.detach()
+                    tr.append(newTd)
+                 }
+                 else {
+                    alert(response.error);
+                 }
+            },
+            error: function(){
+                alert("Error");
+        }
+        });
+
+    });
+
+
+$tableID.on("click", ".colour-valid", function () {
+    var colour_id = $(this).parents("tr").find('.colour-name-label').attr('id');
+    var td = $(this).parents("td");
+    var tr = $(this).parents("tr");
+    var button = tr.find(".colour-valid");
+    let newTr = '<td><i class="las la-times text-danger colour-invalid"></i><i class="las la-trash text-danger colour-remove"></i></td>'
+    var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
+    $.ajax({
+        data: {
+            'colour_id': colour_id,
+            'colour_status': 'False',
+            'csrfmiddlewaretoken': csrftoken,
+            },
+            type: "POST",
+            url: "/crm/colour_status/",
+
+            success: function (response) {
+                 if (response.response === 'good') {
+                    td.detach()
+                    tr.append(newTr)
+                 }
+                 else {
+                    alert(response.error);
+                 }
+            },
+            error: function(){
+                alert("Error");
+        }
+        });
+
+    });
+
+
+
+$tableID.on("click", ".colour-remove", function() {
+    var colour_id = $(this).parents("tr").find('.colour-name-label').attr('id');
+    var tr = $(this).parents("tr");
+    var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
+    $.ajax({
+        data: {
+            'colour_id': colour_id,
+            'csrfmiddlewaretoken': csrftoken,
+            },
+            type: "POST",
+            url: "/crm/delete_colour/",
+
+            success: function (response) {
+                 if (response.response == 'good') {
+                    tr.detach()
+                 }
+                 else {
+                    alert(response.error);
+                 }
+            },
+            error: function (response) {
+                console.log(response.error);
+            }
+        });
+    });
+
+
+
+$('.colours').on('blur', 'td[contenteditable]', function() {
+    var colour = $(this).parents("tr").find('.colour-name-label').text();
+    var colour_id = $(this).attr('id');
+    var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
+
+    $.ajax({
+        data: {
+            'colour_id': colour_id,
+            'colour': colour,
+            'csrfmiddlewaretoken': csrftoken,
+            },
+        type: "POST",
+        url: "/crm/update_colour/",
+
+        success: function (response){
+            },
+        error: function(response){
+            console.log(response.error);
             }
     })
 });

@@ -89,62 +89,68 @@
                        <div class="iq-card">
                            <div class="iq-card-header d-flex justify-content-between">
                                <div class="iq-header-title">
-                                  <h4 class="card-title">Упаковки</h4>
+                                  <h4 class="card-title">Коробки</h4>
                                </div>
                            </div>
                            <div class="iq-card-body">
                                <div id="table" class="table-editable">
-                                    <span class="packing-add float-right mb-0 mr-2">
+                                    <span class="colour-add float-right mb-0 mr-2">
                                         <button class="btn btn-sm iq-bg-success"><i class="ri-add-fill">
                                             <span class="pl-1">Добавить</span></i>
                                         </button>
                                     </span>
                                    <div class="col-md-4 mb-2 float-right">
-                                       <input type="text" class="form-control packing-add-input" required="">
+                                       <input type="text" class="form-control colour-add-input" required="">
                                    </div>
                                    <table class="table mb-0 table-borderless">
                                        <thead>
                                        </thead>
                                        <tbody>
-                                       <script type="text/javascript">
+                                        <script type="text/javascript">
                                             function change() {
-                                                    $('.packings').on('blur', 'td[contenteditable]', function() {
-                                                        var packing_name = $(this).parents("tr").find('.packing-name-label').text()
-                                                        var packing_id = $(this).attr('id');
+                                                    $('.colours').on('blur', 'td[contenteditable]', function() {
+                                                        var colour = $(this).parents("tr").find('.colour-name-label').text()
+                                                        var colour_id = $(this).attr('id');
                                                         var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
 
                                                         $.ajax({
                                                             data: {
-                                                                'packing_id': packing_id,
-                                                                'packing_name': packing_name,
+                                                                'colour_id': colour_id,
+                                                                'colour': colour,
                                                                 'csrfmiddlewaretoken': csrftoken,
                                                                 },
                                                             type: "POST",
-                                                            url: "/crm/update_packing/",
+                                                            url: "/crm/update_colour/",
 
-                                                            success: function (response){
-                                                                },
-                                                            error: function(response){
-                                                                alert("failure");
+                                                            success: function (response) {
+                                                                if (response.response) {
+                                                                    console.log('Ok')
                                                                 }
+                                                                else {
+                                                                    alert(response.error);
+                                                                }
+                                                            },
+                                                            error: function(){
+                                                                alert("Error");
+                                                            }
                                                         })
                                                     });
                                             }
                                         </script>
-                                       {% csrf_token %}
-                                       {% for packing in packings %}
-                                           <tr class="packings">
-                                               <td contenteditable="true" id="{{ packing.id }}" class="packing-name-label">{{ packing.packing }}</td>
+                                        {% csrf_token %}
+                                        {% for colour in colours %}
+                                           <tr class="colours">
+                                               <td contenteditable="true" id="{{ colour.id }}" class="colour-name-label">{{ colour.colour }}</td>
                                                <td>
-                                                   {% if packing.status == True %}
-                                                   <i class="las la-times text-danger packing-invalid"></i>
+                                                   {% if colour.status == False %}
+                                                   <i class="las la-times text-danger colour-invalid"></i>
                                                    {% else %}
-                                                   <i class="las la-check text-success packing-valid"></i>
+                                                   <i class="las la-check text-success colour-valid"></i>
                                                    {% endif %}
-                                                   <i class="las la-trash text-danger packing-remove"></i>
+                                                   <i class="las la-trash text-danger colour-remove"></i>
                                                </td>
                                            </tr>
-                                       {% endfor %}
+                                        {% endfor %}
                                        </tbody>
                                    </table>
                                </div>
