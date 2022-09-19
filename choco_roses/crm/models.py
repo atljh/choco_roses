@@ -21,26 +21,30 @@ class Client(models.Model):
 		return reverse('crm:detail-client', kwargs={'pk': self.pk})
 
 
-# class Product(models.Model):
-# 	name = models.CharField(max_length=60)
-# 	price = models.IntegerField(default=0)
-# 	color = models.ForeignCKey(RoseColour, on_delete=models.CASCADE, default=1)
-# 	rose_amount = models.ForeignKey(RoseAmount, on_delete=models.CASCADE, default=1)
-# 	description = models.CharField(
-# 		max_length=250, default='', blank=True, null=True)
-# 	image = models.ImageField(upload_to='products/')
-# 	date_created = models.DateTimeField(auto_now_add=True)
-#
-# 	@staticmethod
-# 	def get_products_by_id(ids):
-# 		return Product.objects.filter(id__in=ids)
-#
-# 	@staticmethod
-# 	def get_all_products():
-# 		return Product.objects.all()
-#
-# 	def __str__(self):
-# 		return self.name
+class Product(models.Model):
+	name = models.CharField(max_length=60)
+	colours = models.CharField(max_length=150, blank=True, null=False)
+	rose_amount = models.IntegerField(
+		validators=[MinValueValidator(0), MaxValueValidator(1000000)])
+	packing = models.CharField(max_length=100, blank=True, null=True)
+	rose_box = models.CharField(max_length=100, blank=True, null=True)
+	price = models.IntegerField(
+		default=0, validators=[MinValueValidator(0), MaxValueValidator(1000000)])
+	image = models.ImageField(upload_to='products/', null=True)
+	description = models.CharField(
+		max_length=250, default='', blank=True, null=True)
+	date_created = models.DateTimeField(auto_now_add=True)
+
+	@staticmethod
+	def get_products_by_id(ids):
+		return Product.objects.filter(id__in=ids)
+
+	@staticmethod
+	def get_all_products():
+		return Product.objects.all()
+
+	def __str__(self):
+		return self.name
 
 
 class RoseBoxes(models.Model):
@@ -111,9 +115,6 @@ class Order(models.Model):
 
 	class Mera:
 		ordering = ['-number']
-
-	def order_save(self):
-		self.save()
 
 	@staticmethod
 	def get_orders_buckets(order_id):
