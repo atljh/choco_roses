@@ -69,10 +69,6 @@ $(document).ready(function () {
             all_buckets.push(bucket_values);
         });
 
-//        for (i = 0; i < images_list.length; i++) {
-//                        formData.append('file' + i, images_list[i]);
-//                    }
-//
         formData.append('order', JSON.stringify(orders_details));
         formData.append('buckets', JSON.stringify(all_buckets));
         formData.append('csrfmiddlewaretoken', csrftoken);

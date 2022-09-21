@@ -2,6 +2,7 @@ from . import views
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from . import components
 from . import validators
 
 urlpatterns = [
@@ -13,21 +14,21 @@ urlpatterns = [
 	path('save_order/', views.save_order, name='save-order'),
 	path('save_order/', views.save_order, name='save-order'),
 
-	path('boxes/', views.rose_boxes, name='boxes'),
-	path('add_box/', views.add_box, name='add-box'),
-	path('delete_box/', views.delete_box, name='add-boxes'),
-	path('update_box/', views.update_box, name='add-boxes'),
-	path('box_status/', views.status_box, name='status-box'),
-	path('packings/', views.rose_packings, name='packings'),
-	path('add_packing/', views.add_packing, name='add-packing'),
-	path('packing_status/', views.status_packing, name='status-packing'),
-	path('delete_packing/', views.delete_packing, name='delete-packing'),
-	path('update_packing/', views.update_packing, name='update-packing'),
-	path('colours/', views.rose_colours, name='rose-colours'),
-	path('add_colour/', views.add_colour, name='add-colour'),
-	path('delete_colour/', views.delete_colour, name='add-colour'),
-	path('update_colour/', views.update_colour, name='add-colour'),
-	path('colour_status/', views.status_colour, name='status-colour'),
+	path('boxes/', components.rose_boxes, name='boxes'),
+	path('add_box/', components.add_box, name='add-box'),
+	path('delete_box/', components.delete_box, name='add-boxes'),
+	path('update_box/', components.update_box, name='add-boxes'),
+	path('box_status/', components.status_box, name='status-box'),
+	path('packings/', components.rose_packings, name='packings'),
+	path('add_packing/', components.add_packing, name='add-packing'),
+	path('packing_status/', components.status_packing, name='status-packing'),
+	path('delete_packing/', components.delete_packing, name='delete-packing'),
+	path('update_packing/', components.update_packing, name='update-packing'),
+	path('colours/', components.rose_colours, name='rose-colours'),
+	path('add_colour/', components.add_colour, name='add-colour'),
+	path('delete_colour/', components.delete_colour, name='add-colour'),
+	path('update_colour/', components.update_colour, name='add-colour'),
+	path('colour_status/', components.status_colour, name='status-colour'),
 	path('calendar/', views.calendar, name='calendar'),
 	path('products/', views.products, name='products'),
 	path('settings/', views.settings, name='settings'),
