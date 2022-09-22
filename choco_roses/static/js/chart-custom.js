@@ -8432,7 +8432,7 @@ $(".table-add").on("click", "i", () => {
 			if (e.files && e.files[0]) {
 				var t = new FileReader;
 				t.onload = function(e) {
-					$(".profile-pic").attr("src", e.target.result)
+					$(".product-pic").attr("src", e.target.result)
 				}, t.readAsDataURL(e.files[0])
 			}
 		}(this)

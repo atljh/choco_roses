@@ -22,8 +22,7 @@ $(document).ready(function () {
 // GET ORDER
 
 $(document).ready(function () {
-    $("#saveorder").on("click", function () {
-
+    $(".save-order").on("click", function () {
         var order = $('.order').find('.iq-card-body').find('.form-group').find('.form-control');
         var orders_details = {};
         order.each(function(){
@@ -41,7 +40,6 @@ $(document).ready(function () {
 
         var bucket = $( ".bucket" ).find('.iq-card-body');
         var all_buckets = [];
-        var images_list = [];
 
         var csrftoken = $( "input[name='csrfmiddlewaretoken']" ).val();
         var formData = new FormData();
