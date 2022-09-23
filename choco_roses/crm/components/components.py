@@ -1,7 +1,7 @@
-from .models import RosePacking, RoseAmount, RoseBoxes, RoseColour
+from ..models import RosePacking, RoseAmount, RoseBox, RoseColour
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
-from .views import is_ajax
+from ..views import is_ajax
 from django.shortcuts import render
 
 
@@ -10,7 +10,7 @@ from django.shortcuts import render
 @staff_member_required
 def rose_boxes(request):
 	try:
-		boxes = RoseBoxes.objects.all()
+		boxes = RoseBox.objects.all()
 	except Exception as exc:
 		return JsonResponse({'error': exc}, status=500)
 	context = {
@@ -25,7 +25,7 @@ def add_box(request):
 		return JsonResponse({'error': 'request in not ajax'}, status=400)
 	box_name = request.POST.get('box_name')
 	try:
-		box = RoseBoxes.objects.create(box=box_name, status=True)
+		box = RoseBox.objects.create(box=box_name, status=True)
 	except TypeError as exc:
 		return JsonResponse({'error': f'{exc}'}, status=500)
 	except Exception as exc:
@@ -41,10 +41,10 @@ def status_box(request):
 	box_status = request.POST.get('box_status')
 	box_id = request.POST.get('box_id')
 	try:
-		box = RoseBoxes.objects.get(id=box_id)
+		box = RoseBox.objects.get(id=box_id)
 		box.status = box_status
 		box.save()
-	except RoseBoxes.DoesNotExist as exc:
+	except RoseBox.DoesNotExist as exc:
 		return JsonResponse({'error': f'{exc}'}, status=500)
 	except TypeError as exc:
 		return JsonResponse({'error': f'{exc}'}, status=500)
@@ -60,8 +60,8 @@ def delete_box(request):
 		return JsonResponse({'error': 'request in not ajax'}, status=400)
 	box_id = request.POST.get('box_id')
 	try:
-		RoseBoxes.objects.get(id=box_id).delete()
-	except RoseBoxes.DoesNotExist as exc:
+		RoseBox.objects.get(id=box_id).delete()
+	except RoseBox.DoesNotExist as exc:
 		return JsonResponse({'error': f'{exc}'}, status=500)
 	except TypeError as exc:
 		return JsonResponse({'error': f'{exc}'}, status=500)
@@ -78,10 +78,10 @@ def update_box(request):
 	box_name = request.POST.get('box_name')
 	box_id = request.POST.get('box_id')
 	try:
-		box = RoseBoxes.objects.get(id=box_id)
+		box = RoseBox.objects.get(id=box_id)
 		box.box = box_name
 		box.save()
-	except RoseBoxes.DoesNotExist as exc:
+	except RoseBox.DoesNotExist as exc:
 		return JsonResponse({'error': f'{exc}'}, status=500)
 	except TypeError as exc:
 		return JsonResponse({'error': f'{exc}'}, status=500)
@@ -245,3 +245,4 @@ def status_colour(request):
 
 
 # endregion
+	

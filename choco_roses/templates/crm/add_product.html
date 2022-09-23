@@ -88,9 +88,9 @@
    <div class="container-fluid">
         <form action="{% url 'save-product' %}" id="order_form" method="post">
             {% csrf_token %}
-            <div id="row" class="row order-body ">
+            <div class="row">
                 <!-- Product -->
-                <div class="col-lg-3 product dark">
+                <div class="col-lg-3 product">
                     <div class="iq-card">
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
@@ -98,6 +98,10 @@
                                 </div>
                             </div> 
                             <div class="iq-card-body dark" id="col">
+                                <div class="form-group">
+                                    <label for="name">Название:</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="">
+                                </div>
                                 <div class="form-group colour_table" id="colour_table">
                                     <div class="form-group" id="colour">
                                         <label>Выберите цвет:</label>
@@ -141,16 +145,21 @@
                                     <label for="price">Цена:</label>
                                     <input type="text" class="form-control" id="price" name="price" value="">
                                 </div>
-                                <button type="button" class="btn btn-primary save-product">Сохранить заказ</button>
+                                <div class="mb-3 form-group">
+                                    <label for="description" class="form-label">Описание</label>
+                                    <textarea class="form-control" id="description" rows="3" name="description"></textarea>
+                                </div>
                                 <div class="form-group">
                                     <div class="add-img-user product-img-edit" style="margin-bottom: -70px;">
                                        <img class="product-pic img-fluid" src="">
                                        <div class="p-image">
-                                         <a href="javascript:void();" class="upload-button btn iq-bg-primary">Загрузить изображение</a>
-                                         <input class="file-upload" type="file" accept="image/*">
+                                            <!-- <button type="button" class="btn btn-primary mb-3 upload-button">Загрузить изображение</button> -->
+                                            <a href="javascript:void();" class="upload-button btn iq-bg-primary">Загрузить изображение</a>
+                                            <input class="file-upload" type="file" accept="image/*">
                                       </div>
                                     </div>
-                                 </div>
+                                    <button type="button" class="btn-lg btn-success mb-3 save-product">Сохранить</button>
+                               </div>
                         </div>
                     </div>
                 </div>

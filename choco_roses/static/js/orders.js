@@ -72,12 +72,6 @@ $(document).ready(function () {
         formData.append('csrfmiddlewaretoken', csrftoken);
 
         $.ajax({
-//            data: {
-//                'order': JSON.stringify(orders_details),
-//                'buckets': JSON.stringify(all_buckets),
-//                'image': formData.append('images', JSON.stringify(images_list)),
-//                'csrfmiddlewaretoken': formData.append('csrfmiddlewaretoken', csrftoken);,
-//            },
             data: formData,
             type: "POST",
             url: "/crm/save_order/",

@@ -31,12 +31,12 @@ $(document).ready(function () {
             contentType: false,
 
             success: function (response) {
-                        alert ('All done ok');
+                        console.log('All done ok');
 //                        location.href = "/crm/products/"
                     },
 
             error: function (response) {
-                alert("Error");
+                console.log("Error");
             }
         });
         return false;

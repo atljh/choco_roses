@@ -22,7 +22,7 @@ class Client(models.Model):
 
 
 class Product(models.Model):
-	name = models.CharField(max_length=60)
+	name = models.CharField(max_length=100)
 	colours = models.CharField(max_length=150, blank=True, null=False)
 	rose_amount = models.IntegerField(
 		validators=[MinValueValidator(0), MaxValueValidator(1000000)])
@@ -45,9 +45,12 @@ class Product(models.Model):
 
 	def __str__(self):
 		return self.name
+	
+	class Mera:
+		ordering = ['date_created']
 
 
-class RoseBoxes(models.Model):
+class RoseBox(models.Model):
 	box = models.CharField(max_length=100)
 	status = models.BooleanField(default=False)
 
@@ -85,7 +88,7 @@ class BucketsDetails(models.Model):
 	packing = models.CharField(max_length=100, blank=True, null=True)
 	rose_box = models.CharField(max_length=100, blank=True, null=True)
 	price = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000000)])
-	image = models.ImageField(upload_to='products/', null=True)
+	image = models.ImageField(upload_to='buckets/', null=True)
 
 
 	def __str__(self):

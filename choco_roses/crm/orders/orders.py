@@ -32,10 +32,9 @@ def save_new_order(order, buckets, user, images):
 					colours += f'{colour} '
 				bucket_values['colours'] = colours
 				continue
-			elif field == 'image':
-				image = str(bucket.get('id'))
-				bucket_values[field] = image
 			bucket_values[field] = bucket.get(f'{field}', '')
+		image = images.get(str(bucket.get('id')))
+		bucket_values['image'] = image
 		BucketsDetails.objects.create(**bucket_values)
 
 
@@ -57,10 +56,9 @@ def update_order(order, order_model, buckets, images):
 					colours += f'{colour} '
 				setattr(bucket_model, field, colours)
 				continue
-			elif field == 'image':
-				image = str(bucket.get('id'))
-				setattr(bucket_model, field, image)
 			setattr(bucket_model, field, bucket.get(f'{field}', ''))
+		image = images.get(str(bucket.get('id')))
+		setattr(bucket_model, 'image', image)
 		bucket_model.save()
 
 
@@ -69,8 +67,6 @@ def search_order(search_value, search_status):
 	if search_value and search_status != 'Все' or search_value and search_status == 'Все':
 		order_date = search_date(search_value, search_status)
 		order_number = search_number(search_value, search_status)
-		# if len(list(chain(order_date, order_number))) == 0:
-		# 	return []
 		orders = list(chain(order_date, order_number))
 		return orders
 	elif search_status and search_status != 'Все':

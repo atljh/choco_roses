@@ -86,91 +86,20 @@
 </div>
 <div id="content-page" class="content-page">
     <div class="container-fluid">
-        <form action="{% url 'save-order' %}" id="order_form" method="post">
-            {% csrf_token %}
-            <div id="row" class="row order-body ">
-                <!-- Product -->
-                <div class="col-lg-3 bucket dark">
-                    <div class="iq-card">
-                            <div class="iq-card-header d-flex justify-content-between">
-                                <div class="iq-header-title">
-                                    <h4 class="card-title">Добавить продукт</h4>
-                                </div>
-                            </div>  
-                            <div class="iq-card-body dark" id="col">
-                                <div class="form-group colour_table" id="colour_table">
-                                 <div class="form-group">
-                                    <div class="add-img-user profile-img-edit">
-                                       <img class="profile-pic img-fluid" src="/static/images/user/11.png" alt="profile-pic">
-                                       <div class="p-image">
-                                         <a href="javascript:void();" class="upload-button btn iq-bg-primary">Загрузить изображение</a>
-                                         <input class="file-upload" type="file" accept="image/*">
-                                      </div>
-                                    </div>
-                                   <div class="img-extension mt-3">
-                                      <div class="d-inline-block align-items-center">
-                                          <span>Only</span>
-                                         <a href="javascript:void();">.jpg</a>
-                                         <a href="javascript:void();">.png</a>
-                                         <a href="javascript:void();">.jpeg</a>
-                                         <span>allowed</span>
-                                      </div>
-                                   </div>
-                                 </div>
-                                    <div class="form-group" id="colour">
-                                        <label>Выберите цвет:</label>
-                                        <select class="form-control" id="colours" name="colours" required="">
-                                            <option value=""></option>
-                                            {% for colour in colours %}
-                                            <option>{{colour.colour}}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <div class="invalid-feedback">Example invalid custom select feedback</div>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-primary" id="addcolour">Добавить еще цвет</button>
-                                <div class="form-group">
-                                    <label>Выберите количество роз:</label>
-                                    <select class="form-control" id="rose_amount" name="rose_amount">
-                                        {% for amount in rose_amounts %}
-                                        <option>{{amount.rose_amount}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Выберите упаковку:</label>
-                                    <select class="form-control" id="packing" name="packing">
-                                        <option selected>{{ buckets.packing}}</option>
-                                        {% for pack in rose_packings %}
-                                        <option>{{pack.packing}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Выберите коробку:</label>
-                                    <select class="form-control" id="rose_box" name="rose_box">
-                                        <option selected></option>
-                                        {% for box in boxes %}
-                                        <option>{{box.box}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="price">Цена:</label>
-                                    <input type="text" class="form-control" id="price" name="price" value="">
-                                </div>
-                                <div class="form-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="customFile">
-                                        <label class="custom-file-label" for="customFile">Выберите файл: </label>
-                                        <img class="img-thumbnail output_image"/>
-                                    </div>
-                                </div>
-                        </div>
+            <div id="row" class="row">
+                {% for product in products %}
+                <div class="col-sm-3">
+                    <div class="card iq-mb-3">
+                       <img src="/media/{{ product.image }}" class="card-img-top" alt="#">
+                       <div class="card-body">
+                          <h4 class="card-title">{{ product.name }}</h4>
+                          <p class="card-text">{{ product.description }}</p>
+                          <a href="{{ product.id }}" class="btn dark-icon btn-primary">Button</a>
+                       </div>
                     </div>
-                </div>
+                 </div>
+                {% endfor %}
             </div>
-        </form>
     </div>
 </div>
 <!-- Wrapper END -->
